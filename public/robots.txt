@@ -1,0 +1,8 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow admin or internal pages if any
+Disallow: /api/
+
+Sitemap: https://skyscout.app/sitemap.xml

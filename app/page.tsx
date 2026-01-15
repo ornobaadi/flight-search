@@ -14,7 +14,7 @@ export default function Home() {
             <div className="max-w-4xl w-full mb-12 text-center space-y-6 z-10">
                 <div className="inline-flex items-center justify-center px-4 py-2 bg-white/80 backdrop-blur rounded-full shadow-sm mb-4 border border-indigo-100">
                     <Plane className="w-5 h-5 text-indigo-600 mr-2 fill-indigo-600" />
-                    <span className="text-indigo-900 font-bold tracking-tight">SkyScout Engine</span>
+                    <span className="text-indigo-900 font-bold tracking-tight">SkyScout</span>
                 </div>
             </div>
 

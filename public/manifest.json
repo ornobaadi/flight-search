@@ -1,0 +1,17 @@
+{
+  "name": "SkyScout - Flight Search Engine",
+  "short_name": "SkyScout",
+  "description": "Find and compare the best flight deals from hundreds of airlines",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
