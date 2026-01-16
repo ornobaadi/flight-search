@@ -70,7 +70,7 @@ export function SearchForm() {
     return (
         <Card className="w-full max-w-4xl border-0 shadow-xl bg-white/95 backdrop-blur-sm overflow-visible">
             <CardHeader className="pb-4">
-                <CardTitle className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                <CardTitle className="text-2xl font-bold text-slate-800 flex items-center gap-2 font-display">
                     <Search className="w-5 h-5 text-indigo-600" />
                     Find your next flight
                 </CardTitle>

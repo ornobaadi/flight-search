@@ -150,7 +150,7 @@ export function AISearchAssistant({ onSearchIntent, className }: AISearchAssista
                         <div className="flex items-center gap-2">
                             <MessageCircle className="w-4 h-4 text-slate-600 dark:text-slate-300" />
                             <div>
-                                <h3 className="font-semibold text-slate-900 dark:text-slate-100">Flight Assistant</h3>
+                                <h3 className="font-semibold text-slate-900 dark:text-slate-100 font-display">Flight Assistant</h3>
                                 <p className="text-xs text-slate-500 dark:text-slate-400">Powered by Groq</p>
                             </div>
                         </div>

@@ -74,14 +74,14 @@ export default function ApiTestPage() {
             <div className="max-w-6xl mx-auto space-y-8">
                 {/* Header */}
                 <div className="text-center space-y-2">
-                    <h1 className="text-4xl font-bold text-slate-900">API Testing Dashboard</h1>
+                    <h1 className="text-4xl font-bold text-slate-900 font-display">API Testing Dashboard</h1>
                     <p className="text-slate-600">Test your Amadeus API integration</p>
                 </div>
 
                 {/* Environment Check */}
                 <Card className="border-2 border-indigo-200 bg-indigo-50/50">
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
+                        <CardTitle className="flex items-center gap-2 font-display">
                             <AlertCircle className="w-5 h-5 text-indigo-600" />
                             Environment Setup
                         </CardTitle>
@@ -104,7 +104,7 @@ export default function ApiTestPage() {
                     {/* Locations API Test */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>Test Locations API</CardTitle>
+                            <CardTitle className="font-display">Test Locations API</CardTitle>
                             <CardDescription>Search for airports and cities</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -167,7 +167,7 @@ export default function ApiTestPage() {
                     {/* Flights API Test */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>Test Flights API</CardTitle>
+                            <CardTitle className="font-display">Test Flights API</CardTitle>
                             <CardDescription>Search for flight offers</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">

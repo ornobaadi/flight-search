@@ -58,7 +58,7 @@ export function FlightCard({ flight }: { flight: Flight }) {
                 <div className="flex items-center gap-4 mb-6">
                     {/* Departure */}
                     <div className="flex-1">
-                        <div className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+                        <div className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight font-display">
                             {format(depDate, 'HH:mm')}
                         </div>
                         <div className="text-sm font-medium text-slate-600 dark:text-slate-400 mt-1">
@@ -93,7 +93,7 @@ export function FlightCard({ flight }: { flight: Flight }) {
 
                     {/* Arrival */}
                     <div className="flex-1 text-right">
-                        <div className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+                        <div className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight font-display">
                             {format(arrDate, 'HH:mm')}
                         </div>
                         <div className="text-sm font-medium text-slate-600 dark:text-slate-400 mt-1">
@@ -111,7 +111,7 @@ export function FlightCard({ flight }: { flight: Flight }) {
                     <div>
                         <div className="text-xs text-slate-500 dark:text-slate-400 mb-1">Total price</div>
                         <div className="flex items-baseline gap-1">
-                            <span className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+                            <span className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 font-display">
                                 ${flight.price.toFixed(0)}
                             </span>
                             <span className="text-sm text-slate-500 dark:text-slate-400">USD</span>
@@ -139,7 +139,7 @@ export function FlightCard({ flight }: { flight: Flight }) {
             {/* Expanded Segment Details */}
             {expanded && flight.segments && flight.segments.length > 0 && (
                 <div className="border-t border-slate-200/50 dark:border-slate-700/50 bg-gradient-to-br from-slate-50/50 to-slate-100/50 dark:from-slate-800/30 dark:to-slate-900/30 p-6 backdrop-blur-sm">
-                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-6">
+                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-6 font-display">
                         Flight Details
                     </h4>
                     <div className="space-y-3">

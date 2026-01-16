@@ -27,7 +27,7 @@ export function SearchHeader() {
             <div className="container mx-auto px-4 h-16 flex items-center justify-between">
                 <Link href="/" className="flex items-center gap-2">
                     <Plane className="w-6 h-6 text-indigo-600 dark:text-indigo-400 fill-indigo-600 dark:fill-indigo-400" />
-                    <span className="font-bold text-xl text-indigo-900 dark:text-indigo-100">SkyScout</span>
+                    <span className="font-bold text-xl text-indigo-900 dark:text-indigo-100 font-display">SkyScout</span>
                 </Link>
 
                 {/* Dynamic Compact Search Bar */}

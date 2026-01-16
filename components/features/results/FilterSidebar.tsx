@@ -77,7 +77,7 @@ export function FilterSidebar() {
     return (
         <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm sticky top-20 space-y-6">
             <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-lg text-slate-900 dark:text-white">Filters</h3>
+                <h3 className="font-semibold text-lg text-slate-900 dark:text-white font-display">Filters</h3>
                 <Button 
                     variant="ghost" 
                     size="sm" 

@@ -62,7 +62,7 @@ export function FlightList() {
         return (
             <div className="text-center py-16 px-8 bg-red-50/80 dark:bg-red-900/10 backdrop-blur-sm rounded-2xl border border-red-200/50 dark:border-red-900/50">
                 <div className="text-5xl mb-4">✈️</div>
-                <h3 className="text-lg font-semibold text-red-900 dark:text-red-200 mb-2">Something went wrong</h3>
+                <h3 className="text-lg font-semibold text-red-900 dark:text-red-200 mb-2 font-display">Something went wrong</h3>
                 <p className="text-red-700 dark:text-red-300 text-sm">{error}</p>
             </div>
         )
@@ -72,7 +72,7 @@ export function FlightList() {
         return (
             <div className="text-center py-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-slate-700/50">
                 <div className="text-6xl mb-4">🔍</div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No flights found</h3>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 font-display">No flights found</h3>
                 <p className="text-slate-500 dark:text-slate-400 mb-6">Try adjusting your filters or search criteria</p>
                 <Button variant="outline" onClick={() => window.location.href = '/'} className="gap-2">
                     <Plane className="w-4 h-4" />

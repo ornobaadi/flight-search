@@ -86,7 +86,7 @@ export function SearchResultsPage({
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-2">
                                         <div className="w-5 h-5 border-2 border-indigo-600 dark:border-indigo-400 border-t-transparent rounded-full animate-spin" />
-                                        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+                                        <h1 className="text-2xl font-bold text-slate-900 dark:text-white font-display">
                                             Searching Flights...
                                         </h1>
                                     </div>
@@ -104,7 +104,7 @@ export function SearchResultsPage({
                         {initialOrigin && initialDestination && (
                             <section className={`${isLoading ? 'mt-6' : ''} bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-slate-700/50 p-6 shadow-sm hover:shadow-md transition-shadow`}>
                                 <div className="flex justify-between items-center mb-6">
-                                    <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Flight Route</h2>
+                                    <h2 className="text-lg font-semibold text-slate-900 dark:text-white font-display">Flight Route</h2>
                                     <span className="text-xs text-slate-500 dark:text-slate-400">{initialOrigin} → {initialDestination}</span>
                                 </div>
                                 <FlightRouteMap 
@@ -118,7 +118,7 @@ export function SearchResultsPage({
                         {/* Price Chart Section */}
                         <section className="mt-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-slate-700/50 p-6 shadow-sm hover:shadow-md transition-shadow">
                             <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Price Overview</h2>
+                                <h2 className="text-lg font-semibold text-slate-900 dark:text-white font-display">Price Overview</h2>
                                 <span className="text-xs text-slate-500 dark:text-slate-400">By departure time</span>
                             </div>
                             <div className="h-72">
