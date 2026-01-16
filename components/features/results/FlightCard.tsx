@@ -114,7 +114,7 @@ export function FlightCard({ flight }: { flight: Flight }) {
                             <span className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
                                 ${flight.price.toFixed(0)}
                             </span>
-                            <span className="text-sm text-slate-500 dark:text-slate-400">{flight.currency}</span>
+                            <span className="text-sm text-slate-500 dark:text-slate-400">USD</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">

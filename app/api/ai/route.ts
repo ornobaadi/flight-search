@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { getOpenRouterClient } from '@/lib/openrouter-client';
+import { getGroqClient } from '@/lib/groq-client';
 
 export async function POST(request: Request) {
     try {
         const body = await request.json();
         const { query, action = 'extract', message } = body;
 
-        const client = getOpenRouterClient();
+        const client = getGroqClient();
 
         // Handle simple message requests (for coordinate fetching, etc.)
         if (message) {

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { amadeus } from '@/lib/amadeus-client';
-import { getOpenRouterClient } from '@/lib/openrouter-client';
+import { getGroqClient } from '@/lib/groq-client';
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
         let aiAnalysis = patternAnalysis;
         if (patternAnalysis.confidence < 0.9) {
             try {
-                const aiClient = getOpenRouterClient();
+                const aiClient = getGroqClient();
                 aiAnalysis = await analyzeLocationQuery(aiClient, keyword);
             } catch (aiError: any) {
                 // AI failed (rate limit or error), use pattern-based analysis

@@ -4,7 +4,7 @@ import * as React from "react"
 import { FlightSearchForm } from "@/components/features/search/FlightSearchForm";
 import { AISearchAssistant } from "@/components/features/search/AISearchAssistant";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { FlightSearchIntent } from "@/lib/openrouter-client";
+import { FlightSearchIntent } from "@/lib/ai-types";
 import { Plane } from "lucide-react";
 
 export default function Home() {
@@ -42,7 +42,11 @@ export default function Home() {
             </div>
 
             {/* AI Search Assistant */}
-            <AISearchAssistant onSearchIntent={handleAIIntent} />
+            <AISearchAssistant
+                onSearchIntent={handleAIIntent}
+                className="fixed bottom-6 right-6 z-50"
+            />
+
         </main>
     );
 }

@@ -7,6 +7,8 @@ import { PriceChart } from "./PriceChart"
 import { FlightList } from "./FlightList"
 import { FlightRouteMap } from "./FlightRouteMap"
 import { SearchHeader } from "@/components/layout/SearchHeader"
+import { AISearchAssistant } from "@/components/features/search/AISearchAssistant"
+import { FlightSearchIntent } from "@/lib/ai-types"
 
 export function SearchResultsPage({
     initialOrigin,
@@ -43,6 +45,20 @@ export function SearchResultsPage({
         return null
     }
 
+    const handleAIIntent = (intent: FlightSearchIntent) => {
+        if (intent.intent !== 'search') return
+
+        setSearchParams({
+            origin: intent.origin || '',
+            destination: intent.destination || '',
+            departureDate: intent.departureDate ? new Date(intent.departureDate) : undefined,
+            returnDate: intent.returnDate ? new Date(intent.returnDate) : undefined,
+            passengers: intent.adults || 1,
+        })
+
+        searchFlights()
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-50/30 via-white to-blue-50/30 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-950">
             <SearchHeader />
@@ -62,7 +78,7 @@ export function SearchResultsPage({
                     </aside>
 
                     {/* Main Content */}
-                    <div className="lg:col-span-9 space-y-6">
+                    <div className="lg:col-span-9">
 
                         {/* Results Summary */}
                         {isLoading ? (
@@ -81,20 +97,12 @@ export function SearchResultsPage({
                             </div>
                         ) : filteredFlights.length > 0 && (
                             <div className="flex items-center justify-between">
-                                <div>
-                                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                                        {filteredFlights.length} {filteredFlights.length === 1 ? 'Flight' : 'Flights'} Found
-                                    </h1>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                                        {initialOrigin} → {initialDestination}
-                                    </p>
-                                </div>
                             </div>
                         )}
 
                         {/* Flight Route Map Section */}
                         {initialOrigin && initialDestination && (
-                            <section className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-slate-700/50 p-6 shadow-sm hover:shadow-md transition-shadow">
+                            <section className={`${isLoading ? 'mt-6' : ''} bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-slate-700/50 p-6 shadow-sm hover:shadow-md transition-shadow`}>
                                 <div className="flex justify-between items-center mb-6">
                                     <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Flight Route</h2>
                                     <span className="text-xs text-slate-500 dark:text-slate-400">{initialOrigin} → {initialDestination}</span>
@@ -108,7 +116,7 @@ export function SearchResultsPage({
                         )}
 
                         {/* Price Chart Section */}
-                        <section className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-slate-700/50 p-6 shadow-sm hover:shadow-md transition-shadow">
+                        <section className="mt-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-slate-700/50 p-6 shadow-sm hover:shadow-md transition-shadow">
                             <div className="flex justify-between items-center mb-6">
                                 <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Price Overview</h2>
                                 <span className="text-xs text-slate-500 dark:text-slate-400">By departure time</span>
@@ -119,12 +127,17 @@ export function SearchResultsPage({
                         </section>
 
                         {/* Flight List Section */}
-                        <section>
+                        <section className="mt-6">
                             <FlightList />
                         </section>
                     </div>
                 </div>
             </main>
+
+            <AISearchAssistant
+                onSearchIntent={handleAIIntent}
+                className="fixed bottom-6 right-6 z-50"
+            />
         </div>
     )
 }

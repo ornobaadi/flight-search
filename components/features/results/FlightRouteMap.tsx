@@ -293,7 +293,7 @@ async function fetchAirportCoordinates(airportCode: string): Promise<AirportCoor
     }
 
     try {
-        // Use OpenRouter AI to get approximate coordinates
+        // Use AI to get approximate coordinates
         const response = await fetch('/api/ai', {
             method: 'POST',
             headers: {
@@ -475,13 +475,13 @@ export function FlightRouteMap({ origin, destination, className }: FlightRouteMa
     const latDiff = Math.abs(originCoords.coordinates[1] - destCoords.coordinates[1])
     const maxDiff = Math.max(lonDiff, latDiff)
     
-    // Approximate zoom level based on distance
-    let zoom = 4
-    if (maxDiff < 5) zoom = 7
-    else if (maxDiff < 20) zoom = 5
-    else if (maxDiff < 50) zoom = 4
-    else if (maxDiff < 100) zoom = 3
-    else zoom = 2
+    // Approximate zoom level based on distance (more zoomed out)
+    let zoom = 3
+    if (maxDiff < 5) zoom = 5.7
+    else if (maxDiff < 20) zoom = 3.8
+    else if (maxDiff < 50) zoom = 3
+    else if (maxDiff < 100) zoom = 2.2
+    else zoom = 1.6
 
     return (
         <div className={cn("relative rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700", className)}>

@@ -15,7 +15,7 @@ import {
 import { useSearchStore } from "@/store/use-search-store"
 import { LocationInput } from "./LocationInput"
 import { Separator } from "@/components/ui/separator"
-import { FlightSearchIntent } from "@/lib/openrouter-client"
+import { FlightSearchIntent } from "@/lib/ai-types"
 
 export interface FlightSearchFormRef {
     applyAIIntent: (intent: FlightSearchIntent) => void;

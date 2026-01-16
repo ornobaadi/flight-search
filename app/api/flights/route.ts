@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { amadeus } from '@/lib/amadeus-client';
 import { Flight, Airline, Airport } from '@/lib/api/types';
 import { format } from 'date-fns';
+import { convertToUSD } from '@/lib/currency-converter';
 
 // Helper to look up airline names (Mock/Hardcoded mostly as API returns codes, 
 // though Dictionaries in response contain them, we'll try to use that)
@@ -35,8 +36,8 @@ export async function GET(request: Request) {
         const data = response.data; // The flight offers
         const dictionaries = response.result?.dictionaries; // Lookup tables for codes
 
-        // 2. Map Response to our Schema
-        const flights: Flight[] = data.map((offer: any) => {
+        // 2. Map Response to our Schema and convert prices to USD
+        const flights: Flight[] = await Promise.all(data.map(async (offer: any) => {
             const itinerary = offer.itineraries[0]; // Assume one-way for MVP
             const segments = itinerary.segments;
             const firstSegment = segments[0];
@@ -67,8 +68,10 @@ export async function GET(request: Request) {
                 logo: getAirlineLogo(carrierCode)
             };
 
-            // Price
-            const price = parseFloat(offer.price.total); // Includes taxes
+            // Price - Convert to USD
+            const originalPrice = parseFloat(offer.price.total);
+            const originalCurrency = offer.price.currency;
+            const priceInUSD = await convertToUSD(originalPrice, originalCurrency);
 
             // Construct Departure/Arrival
             // Need to look up airport names from dictionaries if possible, else use ID
@@ -97,8 +100,8 @@ export async function GET(request: Request) {
 
             return {
                 id: offer.id,
-                price: price,
-                currency: offer.price.currency,
+                price: priceInUSD,
+                currency: 'USD', // Always USD after conversion
                 airline: airline,
                 flightNumber: `${carrierCode}${firstSegment.number}`,
                 departure: {
@@ -113,7 +116,7 @@ export async function GET(request: Request) {
                 stops: stops,
                 segments: [] // Fill if needed for details view
             };
-        });
+        }));
 
         return NextResponse.json({ flights });
 
