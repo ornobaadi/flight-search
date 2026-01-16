@@ -2,10 +2,11 @@
 import { useSearchStore } from "@/store/use-search-store";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { format } from "date-fns";
-import { TrendingDown } from "lucide-react";
+import { TrendingDown, Loader2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function PriceChart() {
-    const { filteredFlights } = useSearchStore();
+    const { filteredFlights, isLoading } = useSearchStore();
 
     // Prepare data - group by time slots for better visualization
     const data = [...filteredFlights]
@@ -21,10 +22,40 @@ export function PriceChart() {
     const minPrice = data.length > 0 ? Math.min(...data.map(d => d.price)) : 0;
     const maxPrice = data.length > 0 ? Math.max(...data.map(d => d.price)) : 0;
 
+    if (isLoading) {
+        return (
+            <div className="w-full h-full flex flex-col gap-4 p-4">
+                {/* Stats Skeleton */}
+                <div className="flex gap-3">
+                    <Skeleton className="h-20 w-32 rounded-lg" />
+                    <Skeleton className="h-20 w-32 rounded-lg" />
+                </div>
+                {/* Chart Skeleton */}
+                <div className="flex-1 flex items-end gap-2 pb-8">
+                    {[...Array(12)].map((_, i) => (
+                        <Skeleton 
+                            key={i} 
+                            className="flex-1 rounded-t-lg" 
+                            style={{ height: `${Math.random() * 60 + 40}%` }}
+                        />
+                    ))}
+                </div>
+                {/* Loading text */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm px-4 py-2 rounded-lg flex items-center gap-2 border border-slate-200 dark:border-slate-700">
+                        <Loader2 className="w-4 h-4 animate-spin text-indigo-600 dark:text-indigo-400" />
+                        <span className="text-sm text-slate-600 dark:text-slate-300">Loading price data...</span>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     if (data.length === 0) return (
-        <div className="flex flex-col items-center justify-center h-full text-slate-400">
+        <div className="flex flex-col items-center justify-center h-full text-slate-400 dark:text-slate-500">
             <div className="text-4xl mb-3">📊</div>
-            <p className="text-sm">No data to visualize</p>
+            <p className="text-sm">No price data available</p>
+            <p className="text-xs mt-1">Try different search criteria</p>
         </div>
     );
 

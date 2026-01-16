@@ -139,6 +139,150 @@ const AIRPORT_COORDS: Record<string, AirportCoordinates> = {
         name: "Barcelona-El Prat Airport",
         city: "Barcelona",
         coordinates: [2.0785, 41.2974]
+    },
+    "MAN": {
+        code: "MAN",
+        name: "Manchester Airport",
+        city: "Manchester",
+        coordinates: [-2.2750, 53.3537]
+    },
+    "LGW": {
+        code: "LGW",
+        name: "London Gatwick Airport",
+        city: "London",
+        coordinates: [-0.1903, 51.1537]
+    },
+    "JNB": {
+        code: "JNB",
+        name: "O. R. Tambo International Airport",
+        city: "Johannesburg",
+        coordinates: [28.2460, -26.1392]
+    },
+    "SYD": {
+        code: "SYD",
+        name: "Sydney Kingsford Smith Airport",
+        city: "Sydney",
+        coordinates: [151.1772, -33.9399]
+    },
+    "MEL": {
+        code: "MEL",
+        name: "Melbourne Airport",
+        city: "Melbourne",
+        coordinates: [144.8432, -37.6690]
+    },
+    "YYZ": {
+        code: "YYZ",
+        name: "Toronto Pearson International Airport",
+        city: "Toronto",
+        coordinates: [-79.6248, 43.6777]
+    },
+    "YVR": {
+        code: "YVR",
+        name: "Vancouver International Airport",
+        city: "Vancouver",
+        coordinates: [-123.1815, 49.1947]
+    },
+    "ICN": {
+        code: "ICN",
+        name: "Incheon International Airport",
+        city: "Seoul",
+        coordinates: [126.4506, 37.4602]
+    },
+    "PEK": {
+        code: "PEK",
+        name: "Beijing Capital International Airport",
+        city: "Beijing",
+        coordinates: [116.5846, 40.0725]
+    },
+    "PVG": {
+        code: "PVG",
+        name: "Shanghai Pudong International Airport",
+        city: "Shanghai",
+        coordinates: [121.8050, 31.1434]
+    },
+    "HKG": {
+        code: "HKG",
+        name: "Hong Kong International Airport",
+        city: "Hong Kong",
+        coordinates: [113.9145, 22.3080]
+    },
+    "BKK": {
+        code: "BKK",
+        name: "Suvarnabhumi Airport",
+        city: "Bangkok",
+        coordinates: [100.7501, 13.6900]
+    },
+    "IST": {
+        code: "IST",
+        name: "Istanbul Airport",
+        city: "Istanbul",
+        coordinates: [28.8159, 41.2753]
+    },
+    "MUC": {
+        code: "MUC",
+        name: "Munich Airport",
+        city: "Munich",
+        coordinates: [11.7861, 48.3538]
+    },
+    "ZRH": {
+        code: "ZRH",
+        name: "Zurich Airport",
+        city: "Zurich",
+        coordinates: [8.5491, 47.4647]
+    },
+    "FCO": {
+        code: "FCO",
+        name: "Leonardo da Vinci-Fiumicino Airport",
+        city: "Rome",
+        coordinates: [12.2389, 41.8003]
+    },
+    "MIA": {
+        code: "MIA",
+        name: "Miami International Airport",
+        city: "Miami",
+        coordinates: [-80.2906, 25.7959]
+    },
+    "SEA": {
+        code: "SEA",
+        name: "Seattle-Tacoma International Airport",
+        city: "Seattle",
+        coordinates: [-122.3088, 47.4502]
+    },
+    "DEN": {
+        code: "DEN",
+        name: "Denver International Airport",
+        city: "Denver",
+        coordinates: [-104.6737, 39.8561]
+    },
+    "LAS": {
+        code: "LAS",
+        name: "Harry Reid International Airport",
+        city: "Las Vegas",
+        coordinates: [-115.1523, 36.0840]
+    },
+    "MCO": {
+        code: "MCO",
+        name: "Orlando International Airport",
+        city: "Orlando",
+        coordinates: [-81.3081, 28.4294]
+    },
+    "BOS": {
+        code: "BOS",
+        name: "Boston Logan International Airport",
+        city: "Boston",
+        coordinates: [-71.0096, 42.3656]
+    },
+    "IAH": {
+        code: "IAH",
+        name: "George Bush Intercontinental Airport",
+        city: "Houston",
+        coordinates: [-95.3414, 29.9902]
+    },
+    "DFW": {
+        code: "DFW",
+        name: "Dallas/Fort Worth International Airport",
+        city: "Dallas",
+        coordinates: [-97.0372, 32.8998]
     }
 }
 

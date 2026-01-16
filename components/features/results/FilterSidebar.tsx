@@ -4,10 +4,11 @@ import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useMemo } from "react";
 
 export function FilterSidebar() {
-    const { filters, setFilter, resetFilters, allFlights } = useSearchStore();
+    const { filters, setFilter, resetFilters, allFlights, isLoading } = useSearchStore();
 
     // Dynamically extract unique airlines from actual flight data
     const AIRLINES = useMemo(() => {
@@ -36,6 +37,42 @@ export function FilterSidebar() {
             max: Math.ceil(Math.max(...prices))
         };
     }, [allFlights]);
+
+    if (isLoading) {
+        return (
+            <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm sticky top-20 space-y-6">
+                <div className="flex items-center justify-between">
+                    <Skeleton className="h-6 w-16" />
+                    <Skeleton className="h-6 w-12" />
+                </div>
+                
+                <div className="space-y-2">
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-8 w-full" />
+                </div>
+
+                <div className="space-y-3">
+                    <Skeleton className="h-5 w-28" />
+                    {[1, 2, 3].map(i => (
+                        <div key={i} className="flex items-center gap-2">
+                            <Skeleton className="h-4 w-4 rounded" />
+                            <Skeleton className="h-4 w-24" />
+                        </div>
+                    ))}
+                </div>
+
+                <div className="space-y-3">
+                    <Skeleton className="h-5 w-20" />
+                    {[1, 2, 3, 4].map(i => (
+                        <div key={i} className="flex items-center gap-2">
+                            <Skeleton className="h-4 w-4 rounded" />
+                            <Skeleton className="h-4 w-32" />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm sticky top-20 space-y-6">

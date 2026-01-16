@@ -20,6 +20,7 @@ export function SearchResultsPage({
     const setSearchParams = useSearchStore((state) => state.setSearchParams)
     const searchFlights = useSearchStore((state) => state.searchFlights)
     const filteredFlights = useSearchStore((state) => state.filteredFlights)
+    const isLoading = useSearchStore((state) => state.isLoading)
     const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
@@ -43,13 +44,13 @@ export function SearchResultsPage({
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50/30 via-white to-blue-50/30 dark:from-slate-950 dark:to-slate-900">
+        <div className="min-h-screen bg-gradient-to-br from-indigo-50/30 via-white to-blue-50/30 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-950">
             <SearchHeader />
 
             {/* Decorative background elements */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-                <div className="absolute top-[10%] right-[5%] w-[500px] h-[500px] rounded-full bg-indigo-100/30 blur-3xl" />
-                <div className="absolute bottom-[20%] left-[10%] w-[400px] h-[400px] rounded-full bg-blue-100/20 blur-3xl" />
+                <div className="absolute top-[10%] right-[5%] w-[500px] h-[500px] rounded-full bg-indigo-100/30 dark:bg-indigo-500/5 blur-3xl" />
+                <div className="absolute bottom-[20%] left-[10%] w-[400px] h-[400px] rounded-full bg-blue-100/20 dark:bg-blue-500/5 blur-3xl" />
             </div>
 
             <main className="container mx-auto max-w-7xl px-4 py-8 relative z-10">
@@ -64,7 +65,21 @@ export function SearchResultsPage({
                     <div className="lg:col-span-9 space-y-6">
 
                         {/* Results Summary */}
-                        {filteredFlights.length > 0 && (
+                        {isLoading ? (
+                            <div className="flex items-center justify-between">
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-5 h-5 border-2 border-indigo-600 dark:border-indigo-400 border-t-transparent rounded-full animate-spin" />
+                                        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+                                            Searching Flights...
+                                        </h1>
+                                    </div>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                                        {initialOrigin} → {initialDestination}
+                                    </p>
+                                </div>
+                            </div>
+                        ) : filteredFlights.length > 0 && (
                             <div className="flex items-center justify-between">
                                 <div>
                                     <h1 className="text-2xl font-bold text-slate-900 dark:text-white">

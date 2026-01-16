@@ -138,14 +138,14 @@ export function AISearchAssistant({ onSearchIntent, className }: AISearchAssista
 
             {/* Chat Interface */}
             {isOpen && (
-                <div className="fixed bottom-6 right-6 w-[420px] h-[600px] bg-white dark:bg-slate-950 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col z-50 backdrop-blur-xl">
+                <div className="fixed bottom-6 right-6 w-[420px] h-[600px] bg-white dark:bg-slate-800/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700/50 flex flex-col z-50">
                     {/* Header */}
-                    <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-t-2xl">
+                    <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700/50 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 rounded-t-2xl">
                         <div className="flex items-center gap-2">
                             <Sparkles className="w-5 h-5 text-white" />
                             <div>
                                 <h3 className="font-semibold text-white">AI Search Assistant</h3>
-                                <p className="text-xs text-indigo-100">Powered by OpenAI GPT</p>
+                                <p className="text-xs text-indigo-100 dark:text-indigo-200">Powered by OpenAI GPT</p>
                             </div>
                         </div>
                         <button
