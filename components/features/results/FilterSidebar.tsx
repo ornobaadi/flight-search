@@ -1,4 +1,5 @@
 "use client"
+import { useState, useMemo } from "react";
 import { useSearchStore } from "@/store/use-search-store";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -12,12 +13,23 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { useMemo } from "react";
-import { Minus, Plus, Filter, RefreshCw, DollarSign, GitBranch, Building2, Users, Sparkles } from "lucide-react";
+import { Minus, Plus, Filter, DollarSign, GitBranch, Building2, Users, Sparkles, ChevronDown } from "lucide-react";
 import { getPriceForSearch } from "@/lib/api/pricing";
 
 export function FilterSidebar() {
     const { filters, setFilter, resetFilters, allFlights, isLoading, searchParams, setSearchParams } = useSearchStore();
+    
+    // Collapsible sections state - keep essential ones open by default
+    const [expandedSections, setExpandedSections] = useState({
+        travelers: true,
+        price: true,
+        stops: true,
+        airlines: false // Collapse airlines by default to save space
+    });
+    
+    const toggleSection = (section: keyof typeof expandedSections) => {
+        setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
+    };
 
     // Dynamically extract unique airlines from actual flight data
     const AIRLINES = useMemo(() => {
@@ -160,9 +172,21 @@ export function FilterSidebar() {
             </div>
 
             {/* Travelers & Cabin */}
-            <div className="space-y-4">
-                <div className="space-y-2">
-                    <Label className="font-medium text-slate-700 dark:text-slate-300 text-sm">Passengers</Label>
+            <div className="border-t border-slate-100 dark:border-slate-700/50 pt-4">
+                <button
+                    onClick={() => toggleSection('travelers')}
+                    className="w-full flex items-center justify-between mb-3 group"
+                >
+                    <div className="flex items-center gap-2">
+                        <Users className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                        <Label className="font-medium text-slate-700 dark:text-slate-300 text-sm cursor-pointer">Travelers & Cabin</Label>
+                    </div>
+                    <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${expandedSections.travelers ? 'rotate-180' : ''}`} />
+                </button>
+                {expandedSections.travelers && (
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <Label className="font-medium text-slate-700 dark:text-slate-300 text-xs">Passengers</Label>
                     <div className="flex items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-lg px-3 py-2">
                         <Button
                             variant="outline"
@@ -202,14 +226,27 @@ export function FilterSidebar() {
                         </SelectContent>
                     </Select>
                 </div>
+                    </div>
+                )}
             </div>
 
             {/* Price */}
-            <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                    <Label className="font-medium text-slate-700 dark:text-slate-300 text-sm">Max Price</Label>
-                    <span className="text-xl font-bold text-indigo-600 dark:text-indigo-400">${maxPriceValue}</span>
-                </div>
+            <div className="border-t border-slate-100 dark:border-slate-700/50 pt-4">
+                <button
+                    onClick={() => toggleSection('price')}
+                    className="w-full flex items-center justify-between mb-3 group"
+                >
+                    <div className="flex items-center gap-2">
+                        <DollarSign className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                        <Label className="font-medium text-slate-700 dark:text-slate-300 text-sm cursor-pointer">Max Price</Label>
+                        {expandedSections.price && (
+                            <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">${maxPriceValue}</span>
+                        )}
+                    </div>
+                    <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${expandedSections.price ? 'rotate-180' : ''}`} />
+                </button>
+                {expandedSections.price && (
+                    <div className="space-y-4">
                 <Slider
                     value={[maxPriceValue]}
                     min={priceRange.min}
@@ -218,16 +255,28 @@ export function FilterSidebar() {
                     onValueChange={(val) => setFilter('maxPrice', Array.isArray(val) ? val[0] : val)}
                     className="cursor-pointer"
                 />
-                <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-                    <span>${priceRange.min}</span>
-                    <span>${priceRange.max}</span>
-                </div>
+                        <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+                            <span>${priceRange.min}</span>
+                            <span>${priceRange.max}</span>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Stops */}
-            <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-700/50">
-                <Label className="font-medium text-slate-700 dark:text-slate-300 text-sm">Number of Stops</Label>
-                <div className="space-y-2">
+            <div className="border-t border-slate-100 dark:border-slate-700/50 pt-4">
+                <button
+                    onClick={() => toggleSection('stops')}
+                    className="w-full flex items-center justify-between mb-3 group"
+                >
+                    <div className="flex items-center gap-2">
+                        <GitBranch className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                        <Label className="font-medium text-slate-700 dark:text-slate-300 text-sm cursor-pointer">Number of Stops</Label>
+                    </div>
+                    <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${expandedSections.stops ? 'rotate-180' : ''}`} />
+                </button>
+                {expandedSections.stops && (
+                    <div className="space-y-2">
                     {[
                         { val: 0, label: "Nonstop" },
                         { val: 1, label: "1 Stop" },
@@ -256,13 +305,27 @@ export function FilterSidebar() {
                             </span>
                         </div>
                     ))}
-                </div>
+                    </div>
+                )}
             </div>
 
             {/* Airlines */}
-            <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-700/50">
-                <Label className="font-medium text-slate-700 dark:text-slate-300 text-sm">Airlines</Label>
-                <div className="space-y-1.5 max-h-64 overflow-y-auto pr-2 -mr-2 scrollbar-thin">
+            <div className="border-t border-slate-100 dark:border-slate-700/50 pt-4">
+                <button
+                    onClick={() => toggleSection('airlines')}
+                    className="w-full flex items-center justify-between mb-3 group"
+                >
+                    <div className="flex items-center gap-2">
+                        <Building2 className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                        <Label className="font-medium text-slate-700 dark:text-slate-300 text-sm cursor-pointer">Airlines</Label>
+                        {!expandedSections.airlines && AIRLINES.length > 0 && (
+                            <span className="text-xs text-slate-400">({AIRLINES.length})</span>
+                        )}
+                    </div>
+                    <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${expandedSections.airlines ? 'rotate-180' : ''}`} />
+                </button>
+                {expandedSections.airlines && (
+                    <div className="space-y-1.5 max-h-64 overflow-y-auto pr-2 -mr-2 scrollbar-thin">
                     {AIRLINES.length === 0 ? (
                         <div className="text-sm text-slate-400 dark:text-slate-500 py-2">No airlines available</div>
                     ) : (
@@ -291,7 +354,8 @@ export function FilterSidebar() {
                             </div>
                         ))
                     )}
-                </div>
+                    </div>
+                )}
             </div>
         </div>
     )
