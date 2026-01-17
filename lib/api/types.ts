@@ -18,12 +18,30 @@ export interface FlightSegment {
     departure: {
         airport: Airport;
         at: string; // ISO string
+        terminal?: string;
     };
     arrival: {
         airport: Airport;
         at: string; // ISO string
+        terminal?: string;
     };
     duration: number; // minutes
+    aircraft?: string;
+    operating?: Airline;
+    numberOfStops?: number;
+}
+
+export interface FareDetail {
+    segmentId: string;
+    cabin?: string;
+    fareBasis?: string;
+    brandedFare?: string;
+    class?: string;
+    includedCheckedBags?: {
+        quantity?: number;
+        weight?: number;
+        weightUnit?: string;
+    };
 }
 
 export interface Flight {
@@ -43,6 +61,24 @@ export interface Flight {
     duration: number; // minutes
     stops: number;
     segments: FlightSegment[];
+    fareDetails?: FareDetail[];
+    priceBreakdown?: {
+        total: number;
+        base?: number;
+        fees?: { amount: number; type?: string }[];
+    };
+    originalPrice?: {
+        currency: string;
+        total: number;
+        base?: number;
+        fees?: { amount: number; type?: string }[];
+    };
+    lastTicketingDate?: string;
+    numberOfBookableSeats?: number;
+    validatingAirlineCodes?: string[];
+    instantTicketingRequired?: boolean;
+    oneWay?: boolean;
+    source?: string;
 }
 
 export interface SearchParams {

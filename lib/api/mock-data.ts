@@ -1,4 +1,4 @@
-import { Flight, Airline, Airport } from './types';
+import { Flight, Airline, Airport, FlightSegment } from './types';
 import { addMinutes, addHours, format, parseISO } from 'date-fns';
 
 const AIRPORTS: Record<string, Airport> = {
@@ -46,6 +46,30 @@ function generateFlight(
     let duration = 400 + (stops * 120) + (Math.random() * 60); // Base ~7 hours
     const arrivalTime = addMinutes(baseDate, duration).toISOString();
 
+    const airportCodes = Object.keys(AIRPORTS).filter(code => code !== from && code !== to);
+    const stopCodes = airportCodes.sort(() => 0.5 - Math.random()).slice(0, stops);
+    const route = [from, ...stopCodes, to];
+    const segmentDuration = Math.floor(duration / (stops + 1));
+
+    const segments: FlightSegment[] = route.slice(0, -1).map((code, index) => {
+        const segAirline = AIRLINES[airlineCode];
+        const depAirport = AIRPORTS[route[index]];
+        const arrAirport = AIRPORTS[route[index + 1]];
+        const segDeparture = addMinutes(baseDate, index * (segmentDuration + 45));
+        const segArrival = addMinutes(segDeparture, segmentDuration);
+
+        return {
+            id: `${id}-${index + 1}`,
+            flightNumber: `${airlineCode}${Math.floor(Math.random() * 900) + 100}`,
+            airline: segAirline,
+            departure: { airport: depAirport, at: segDeparture.toISOString() },
+            arrival: { airport: arrAirport, at: segArrival.toISOString() },
+            duration: segmentDuration,
+            aircraft: 'A320',
+            numberOfStops: 0
+        };
+    });
+
     return {
         id,
         price: Math.floor(basePrice + (Math.random() * 100) - 50),
@@ -56,7 +80,7 @@ function generateFlight(
         arrival: { airport: dest, at: arrivalTime },
         duration: Math.floor(duration),
         stops,
-        segments: [], // Simplified for now
+        segments,
     };
 }
 
