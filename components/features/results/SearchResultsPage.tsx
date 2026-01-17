@@ -8,6 +8,15 @@ import { FlightList } from "./FlightList"
 import { FlightRouteMap } from "./FlightRouteMap"
 import { SearchHeader } from "@/components/layout/SearchHeader"
 import { InlineSearchForm, InlineSearchFormSkeleton } from "@/components/features/search/InlineSearchForm"
+import { Button } from "@/components/ui/button"
+import { Filter } from "lucide-react"
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
 import type { CabinClass } from "@/lib/api/types"
 
 export function SearchResultsPage({
@@ -65,44 +74,64 @@ export function SearchResultsPage({
                 <div className="absolute bottom-[20%] left-[10%] w-100 h-100 rounded-full bg-blue-100/20 dark:bg-blue-500/5 blur-3xl" />
             </div>
 
-            <main className="container mx-auto max-w-7xl px-4 py-6 relative z-10 space-y-6">
+            <main className="container mx-auto max-w-7xl px-3 sm:px-4 py-4 sm:py-6 relative z-10 space-y-4 sm:space-y-6">
                 {/* Inline Search Form - Modify search without going back to homepage */}
                 <Suspense fallback={<InlineSearchFormSkeleton />}>
                     <InlineSearchForm />
                 </Suspense>
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
 
-                    {/* Filters Sidebar */}
-                    <aside className="lg:col-span-3 order-2 lg:order-1">
+                    {/* Mobile Filter Button - shown on mobile, hidden on desktop */}
+                    <div className="lg:hidden">
+                        <Sheet>
+                            <SheetTrigger asChild>
+                                <Button variant="outline" className="w-full gap-2">
+                                    <Filter className="w-4 h-4" />
+                                    Filters
+                                </Button>
+                            </SheetTrigger>
+                            <SheetContent side="left" className="w-full sm:w-[400px] p-0">
+                                <SheetHeader className="p-4 border-b">
+                                    <SheetTitle>Filters</SheetTitle>
+                                </SheetHeader>
+                                <div className="overflow-y-auto h-[calc(100vh-80px)] p-4">
+                                    <FilterSidebar />
+                                </div>
+                            </SheetContent>
+                        </Sheet>
+                    </div>
+
+                    {/* Filters Sidebar - hidden on mobile, shown on desktop */}
+                    <aside className="hidden lg:block lg:col-span-3 order-2 lg:order-1">
                         <FilterSidebar />
                     </aside>
 
                     {/* Main Content */}
-                    <div className="lg:col-span-9 order-1 lg:order-2 space-y-6">
+                    <div className="lg:col-span-9 order-1 lg:order-2 space-y-4 sm:space-y-6">
 
                         {/* Flight Route Map Section */}
                         {displayOrigin && displayDestination && (
-                            <section className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-slate-700/50 p-6 shadow-sm hover:shadow-md transition-shadow">
-                                <div className="flex justify-between items-center mb-6">
-                                    <h2 className="text-lg font-semibold text-slate-900 dark:text-white font-display">Flight Route</h2>
+                            <section className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-slate-200/50 dark:border-slate-700/50 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-2">
+                                    <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white font-display">Flight Route</h2>
                                     <span className="text-xs text-slate-500 dark:text-slate-400">{displayOrigin} → {displayDestination}</span>
                                 </div>
                                 <FlightRouteMap 
                                     origin={displayOrigin} 
                                     destination={displayDestination}
-                                    className="h-80"
+                                    className="h-60 sm:h-80"
                                 />
                             </section>
                         )}
 
                         {/* Price Chart Section */}
-                        <section className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-slate-700/50 p-6 shadow-sm hover:shadow-md transition-shadow">
-                            <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-lg font-semibold text-slate-900 dark:text-white font-display">Price Overview</h2>
+                        <section className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-slate-200/50 dark:border-slate-700/50 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-2">
+                                <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white font-display">Price Overview</h2>
                                 <span className="text-xs text-slate-500 dark:text-slate-400">By departure time</span>
                             </div>
-                            <div className="h-64">
+                            <div className="h-48 sm:h-64">
                                 <PriceChart />
                             </div>
                         </section>

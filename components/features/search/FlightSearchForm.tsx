@@ -230,16 +230,16 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
         <div className="w-full max-w-5xl mx-auto">
             <div className="relative">
                 {/* Main card */}
-                <div className="bg-white dark:bg-slate-800/80 backdrop-blur-xl border border-slate-200 dark:border-slate-700/50 rounded-xl shadow-lg dark:shadow-indigo-900/10 p-8 space-y-8">
+                <div className="bg-white dark:bg-slate-800/80 backdrop-blur-xl border border-slate-200 dark:border-slate-700/50 rounded-xl shadow-lg dark:shadow-indigo-900/10 p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8">
                     
                     {/* Header with trip options */}
-                    <div className="flex flex-wrap items-center justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2.5 bg-indigo-600 dark:bg-indigo-500 rounded-lg shadow-sm">
-                                <Plane className="w-5 h-5 text-white" />
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                            <div className="p-2 sm:p-2.5 bg-indigo-600 dark:bg-indigo-500 rounded-lg shadow-sm">
+                                <Plane className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                             </div>
                             <div>
-                                <h2 className="text-xl font-semibold text-slate-900 dark:text-white font-display">
+                                <h2 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white font-display">
                                     Book Your Flight
                                 </h2>
                                 <p className="text-xs text-slate-500 dark:text-slate-400">Find the best deals for your journey</p>
@@ -247,11 +247,11 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                         </div>
                         
                         {/* Trip Type Selector - Pill Style */}
-                        <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600/50">
+                        <div className="flex items-center gap-1.5 sm:gap-2 p-1 bg-slate-100 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600/50 w-full sm:w-auto">
                             <button
                                 onClick={() => setTripType("round-trip")}
                                 className={cn(
-                                    "px-4 py-2 rounded-md text-sm font-medium transition-colors",
+                                    "flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors",
                                     tripType === "round-trip"
                                         ? "bg-indigo-600 dark:bg-indigo-500 text-white shadow-sm"
                                         : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
@@ -262,7 +262,7 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                             <button
                                 onClick={() => setTripType("one-way")}
                                 className={cn(
-                                    "px-4 py-2 rounded-md text-sm font-medium transition-colors",
+                                    "flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors",
                                     tripType === "one-way"
                                         ? "bg-indigo-600 dark:bg-indigo-500 text-white shadow-sm"
                                         : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
@@ -277,11 +277,11 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
 
                     {/* Flight Route Section */}
                     <div className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 relative">
                             {/* Origin */}
                             <div className="relative group/input">
-                                <label className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2 ml-1">
-                                    <PlaneTakeoff className="w-3.5 h-3.5" />
+                                <label className="flex items-center gap-1.5 sm:gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2 ml-1">
+                                    <PlaneTakeoff className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
                                     DEPARTURE FROM
                                 </label>
                                 <div className="relative">
@@ -297,7 +297,7 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                                 </div>
                             </div>
 
-                            {/* Swap Button - Centered between cards */}
+                            {/* Swap Button - Desktop (centered between cards) */}
                             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 hidden md:flex">
                                 <button
                                     onClick={handleSwap}
@@ -309,8 +309,8 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
 
                             {/* Destination */}
                             <div className="relative group/input">
-                                <label className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2 ml-1">
-                                    <PlaneLanding className="w-3.5 h-3.5" />
+                                <label className="flex items-center gap-1.5 sm:gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2 ml-1">
+                                    <PlaneLanding className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
                                     ARRIVAL AT
                                 </label>
                                 <div className="relative">
@@ -326,28 +326,39 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                                 </div>
                             </div>
                         </div>
+                        
+                        {/* Swap Button - Mobile (below inputs) */}
+                        <div className="flex md:hidden justify-center -mt-2">
+                            <button
+                                onClick={handleSwap}
+                                className="group flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full text-sm font-medium text-slate-700 dark:text-slate-300 transition-all duration-200"
+                            >
+                                <ArrowRightLeft className="w-3.5 h-3.5 group-hover:rotate-180 transition-transform duration-300" />
+                                Swap
+                            </button>
+                        </div>
 
                         {/* Dates Section */}
                         <div className="space-y-2">
-                            <label className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 ml-1">
-                                <CalendarIcon className="w-3.5 h-3.5" />
+                            <label className="flex items-center gap-1.5 sm:gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 ml-1">
+                                <CalendarIcon className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
                                 {tripType === "round-trip" ? "TRAVEL DATES" : "TRAVEL DATE"}
                             </label>
                             <Popover open={datePopoverOpen} onOpenChange={setDatePopoverOpen}>
                                 <PopoverTrigger
                                     className={cn(
-                                        "w-full h-16 px-5 rounded-lg border transition-all duration-200 text-left hover:bg-slate-50 dark:hover:bg-slate-900",
+                                        "w-full h-14 sm:h-16 px-3 sm:px-5 rounded-lg border transition-all duration-200 text-left hover:bg-slate-50 dark:hover:bg-slate-900",
                                         (tripType === "round-trip" ? dateRange?.from : date)
                                             ? "bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
                                             : "bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800"
                                     )}
                                 >
                                     {tripType === "round-trip" ? (
-                                        <div className="flex items-center gap-4">
-                                            <div className="flex flex-col gap-1">
+                                        <div className="flex items-center gap-2 sm:gap-4">
+                                            <div className="flex flex-col gap-0.5 sm:gap-1">
                                                 {dateRange?.from ? (
                                                     <>
-                                                        <span className="text-lg font-semibold text-slate-900 dark:text-white">
+                                                        <span className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white">
                                                             {format(dateRange.from, "MMM d")}
                                                         </span>
                                                         <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
@@ -355,14 +366,14 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                                                         </span>
                                                     </>
                                                 ) : (
-                                                    <span className="text-slate-400 dark:text-slate-500">Departure</span>
+                                                    <span className="text-sm sm:text-base text-slate-400 dark:text-slate-500">Departure</span>
                                                 )}
                                             </div>
                                             <div className="text-slate-300 dark:text-slate-600">→</div>
-                                            <div className="flex flex-col gap-1">
+                                            <div className="flex flex-col gap-0.5 sm:gap-1">
                                                 {dateRange?.to ? (
                                                     <>
-                                                        <span className="text-lg font-semibold text-slate-900 dark:text-white">
+                                                        <span className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white">
                                                             {format(dateRange.to, "MMM d")}
                                                         </span>
                                                         <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
@@ -375,15 +386,15 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                                                         </span>
                                                     </>
                                                 ) : (
-                                                    <span className="text-slate-400 dark:text-slate-500">Return</span>
+                                                    <span className="text-sm sm:text-base text-slate-400 dark:text-slate-500">Return</span>
                                                 )}
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="flex flex-col gap-1">
+                                        <div className="flex flex-col gap-0.5 sm:gap-1">
                                             {date ? (
                                                 <>
-                                                    <span className="text-lg font-semibold text-slate-900 dark:text-white">
+                                                    <span className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white">
                                                         {format(date, "MMM d, yyyy")}
                                                     </span>
                                                     <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
@@ -391,7 +402,7 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                                                     </span>
                                                 </>
                                             ) : (
-                                                <span className="text-slate-400 dark:text-slate-500">Select date</span>
+                                                <span className="text-sm sm:text-base text-slate-400 dark:text-slate-500">Select date</span>
                                             )}
                                         </div>
                                     )}
@@ -400,8 +411,8 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                                     {tripType === "round-trip" ? (
                                         <div className="flex flex-col">
                                             {/* Trip Duration Selector - Like Google Flights */}
-                                            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-700">
-                                                <span className="text-sm text-slate-600 dark:text-slate-400">
+                                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-3 sm:px-4 py-2 sm:py-3 border-b border-slate-200 dark:border-slate-700 gap-2 sm:gap-0">
+                                                <span className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                                                     Showing prices for
                                                 </span>
                                                 <div className="flex items-center gap-1">
@@ -411,7 +422,7 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                                                     >
                                                         <ChevronLeft className="w-4 h-4" />
                                                     </button>
-                                                    <span className="text-sm font-medium text-slate-900 dark:text-white min-w-20 text-center">
+                                                    <span className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white min-w-16 sm:min-w-20 text-center">
                                                         {tripDuration} day{tripDuration !== 1 ? 's' : ''} trip
                                                     </span>
                                                     <button
@@ -429,7 +440,7 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                                                 onSelect={setDateRange}
                                                 disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
                                                 numberOfMonths={2}
-                                                className="p-4 [--cell-size:--spacing(12)]"
+                                                className="p-2 sm:p-4 [--cell-size:--spacing(12)]"
                                                 month={calendarMonth}
                                                 onMonthChange={setCalendarMonth}
                                                 prices={origin && destination ? priceCalendar : undefined}
@@ -437,8 +448,8 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                                             />
                                             
                                             {/* Footer with price summary and Done button */}
-                                            <div className="flex items-center justify-between px-4 py-3 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
-                                                <div className="text-sm">
+                                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-3 sm:px-4 py-2 sm:py-3 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 gap-2 sm:gap-0">
+                                                <div className="text-xs sm:text-sm">
                                                     {dateRange?.from && priceCalendar[format(dateRange.from, 'yyyy-MM-dd')] ? (
                                                         <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
                                                             from ${priceCalendar[format(dateRange.from, 'yyyy-MM-dd')].toLocaleString()}
@@ -460,7 +471,8 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                                                 </div>
                                                 <Button
                                                     onClick={() => setDatePopoverOpen(false)}
-                                                    size="lg"
+                                                    size="sm"
+                                                    className="w-full sm:w-auto"
                                                 >
                                                     Done
                                                 </Button>
@@ -473,7 +485,7 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                                                 selected={date}
                                                 onSelect={setDate}
                                                 disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
-                                                className="p-4 [--cell-size:--spacing(12)]"
+                                                className="p-2 sm:p-4 [--cell-size:--spacing(12)]"
                                                 month={calendarMonth}
                                                 onMonthChange={setCalendarMonth}
                                                 prices={origin && destination ? priceCalendar : undefined}
@@ -481,8 +493,8 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                                             />
                                             
                                             {/* Footer with price and Done button */}
-                                            <div className="flex items-center justify-between px-4 py-3 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
-                                                <div className="text-sm">
+                                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-3 sm:px-4 py-2 sm:py-3 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 gap-2 sm:gap-0">
+                                                <div className="text-xs sm:text-sm">
                                                     {date && priceCalendar[format(date, 'yyyy-MM-dd')] ? (
                                                         <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
                                                             from ${priceCalendar[format(date, 'yyyy-MM-dd')].toLocaleString()}
@@ -502,7 +514,8 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                                                 </div>
                                                 <Button
                                                     onClick={() => setDatePopoverOpen(false)}
-                                                    size="lg"
+                                                    size="sm"
+                                                    className="w-full sm:w-auto"
                                                 >
                                                     Done
                                                 </Button>
@@ -515,13 +528,13 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                     </div>
 
                     {/* Passengers & Cabin */}
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
                         <Popover>
-                            <PopoverTrigger className="flex items-center gap-3 px-5 py-3 rounded-lg bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-colors">
-                                    <Users className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+                            <PopoverTrigger className="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-colors flex-1 sm:flex-none">
+                                    <Users className="w-4 sm:w-5 h-4 sm:h-5 text-slate-600 dark:text-slate-400" />
                                     <div className="flex flex-col items-start">
                                         <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Travelers</span>
-                                        <span className="text-sm font-semibold text-slate-900 dark:text-white">
+                                        <span className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-white">
                                             {passengers} {passengers === 1 ? "Passenger" : "Passengers"}
                                         </span>
                                     </div>
@@ -550,11 +563,11 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                         </Popover>
 
                         <Popover>
-                            <PopoverTrigger className="flex items-center gap-3 px-5 py-3 rounded-lg bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-colors">
-                                <Sparkles className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+                            <PopoverTrigger className="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-colors flex-1 sm:flex-none">
+                                <Sparkles className="w-4 sm:w-5 h-4 sm:h-5 text-slate-600 dark:text-slate-400" />
                                 <div className="flex flex-col items-start">
                                     <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Class</span>
-                                    <span className="text-sm font-semibold text-slate-900 dark:text-white">{cabin}</span>
+                                    <span className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-white">{cabin}</span>
                                 </div>
                             </PopoverTrigger>
                             <PopoverContent className="w-64 p-3" align="start">
@@ -603,13 +616,13 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                         onClick={handleSearch}
                         disabled={!isValid}
                         className={cn(
-                            "w-full h-14 rounded-lg font-semibold text-base transition-colors flex items-center justify-center gap-2",
+                            "w-full h-12 sm:h-14 rounded-lg font-semibold text-sm sm:text-base transition-colors flex items-center justify-center gap-2",
                             isValid
                                 ? "bg-slate-900 dark:bg-slate-50 hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900"
                                 : "bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-600 cursor-not-allowed border border-slate-200 dark:border-slate-800"
                         )}
                     >
-                        <Search className="w-5 h-5" />
+                        <Search className="w-4 sm:w-5 h-4 sm:h-5" />
                         <span>Search Flights</span>
                     </button>
                 </div>

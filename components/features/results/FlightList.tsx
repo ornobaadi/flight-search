@@ -129,57 +129,59 @@ export function FlightList() {
     }
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
             {/* Sort Controls */}
-            <div className="flex flex-wrap items-center justify-between gap-4 bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm p-4 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
-                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                    <ArrowUpDown className="w-4 h-4" />
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm p-3 sm:p-4 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+                    <ArrowUpDown className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
                     <span className="font-medium">Sort by</span>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-1.5 sm:gap-2 w-full sm:w-auto">
                     <Button
                         variant={sortBy === 'price' ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => setSortBy('price')}
-                        className={sortBy === 'price' ? 'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600' : 'border-slate-200 dark:border-slate-700'}
+                        className={sortBy === 'price' ? 'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-xs sm:text-sm' : 'border-slate-200 dark:border-slate-700 text-xs sm:text-sm'}
                     >
-                        <DollarSign className="w-3.5 h-3.5 mr-1" />
+                        <DollarSign className="w-3 sm:w-3.5 h-3 sm:h-3.5 mr-1" />
                         Price
                     </Button>
                     <Button
                         variant={sortBy === 'duration' ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => setSortBy('duration')}
-                        className={sortBy === 'duration' ? 'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600' : 'border-slate-200 dark:border-slate-700'}
+                        className={sortBy === 'duration' ? 'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-xs sm:text-sm' : 'border-slate-200 dark:border-slate-700 text-xs sm:text-sm'}
                     >
-                        <Clock className="w-3.5 h-3.5 mr-1" />
+                        <Clock className="w-3 sm:w-3.5 h-3 sm:h-3.5 mr-1" />
                         Duration
                     </Button>
                     <Button
                         variant={sortBy === 'departure' ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => setSortBy('departure')}
-                        className={sortBy === 'departure' ? 'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600' : 'border-slate-200 dark:border-slate-700'}
+                        className={sortBy === 'departure' ? 'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-xs sm:text-sm' : 'border-slate-200 dark:border-slate-700 text-xs sm:text-sm'}
                     >
-                        <Plane className="w-3.5 h-3.5 mr-1" />
-                        Departure
+                        <Plane className="w-3 sm:w-3.5 h-3 sm:h-3.5 mr-1" />
+                        <span className="hidden sm:inline">Departure</span>
+                        <span className="sm:hidden">Depart</span>
                     </Button>
                     <Button
                         variant={sortBy === 'stops' ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => setSortBy('stops')}
-                        className={sortBy === 'stops' ? 'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600' : 'border-slate-200 dark:border-slate-700'}
+                        className={sortBy === 'stops' ? 'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-xs sm:text-sm' : 'border-slate-200 dark:border-slate-700 text-xs sm:text-sm'}
                     >
-                        Direct First
+                        <span className="hidden sm:inline">Direct First</span>
+                        <span className="sm:hidden">Stops</span>
                     </Button>
                 </div>
-                <div className="text-sm text-slate-500 dark:text-slate-400">
+                <div className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 w-full sm:w-auto text-center sm:text-left">
                     <strong className="text-slate-900 dark:text-white">{sortedFlights.length}</strong> result{sortedFlights.length !== 1 ? 's' : ''}
                 </div>
             </div>
 
             {/* Flight Cards */}
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
                 {sortedFlights.map((flight) => (
                     <FlightCard key={flight.id} flight={flight} />
                 ))}

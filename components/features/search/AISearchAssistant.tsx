@@ -168,16 +168,16 @@ export function AISearchAssistant({ onSearchIntent, className }: AISearchAssista
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-white/90 dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 rounded-full shadow-sm hover:shadow-md transition"
+                    className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-white/90 dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 rounded-full shadow-sm hover:shadow-md transition"
                 >
                     <MessageCircle className="w-4 h-4" />
-                    <span className="font-medium">Assistant</span>
+                    <span className="font-medium text-sm sm:text-base hidden sm:inline">Assistant</span>
                 </button>
             )}
 
             {/* Chat Interface */}
             {isOpen && (
-                <div className="fixed bottom-6 right-6 w-105 h-150 bg-white dark:bg-slate-950 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col z-50">
+                <div className="fixed inset-x-4 bottom-4 sm:inset-x-auto sm:bottom-6 sm:right-6 w-auto sm:w-105 h-[calc(100vh-2rem)] sm:h-150 max-h-[600px] bg-white dark:bg-slate-950 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col z-50">
                     {/* Header */}
                     <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 rounded-t-2xl">
                         <div className="flex items-center gap-2">

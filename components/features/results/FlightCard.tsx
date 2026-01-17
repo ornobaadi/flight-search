@@ -49,12 +49,12 @@ export function FlightCard({ flight }: { flight: Flight }) {
     };
 
     return (
-        <div className="group bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-slate-700/50 hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-xl transition-all duration-300 overflow-hidden">
-            <div className="p-6">
+        <div className="group bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-slate-200/50 dark:border-slate-700/50 hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-xl transition-all duration-300 overflow-hidden">
+            <div className="p-4 sm:p-6">
                 {/* Top Row: Airline Info */}
-                <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-3">
-                        <div className="relative w-10 h-10 rounded-xl bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center overflow-hidden">
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center overflow-hidden">
                             <Image
                                 src={flight.airline.logo}
                                 alt={flight.airline.name}
@@ -70,25 +70,25 @@ export function FlightCard({ flight }: { flight: Flight }) {
                             </div>
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-medium text-slate-900 dark:text-white text-sm">{flight.airline.name}</span>
+                            <span className="font-medium text-slate-900 dark:text-white text-xs sm:text-sm">{flight.airline.name}</span>
                             <span className="text-xs text-slate-500 dark:text-slate-400">{flight.flightNumber}</span>
                         </div>
                     </div>
                     {flight.stops === 0 && (
-                        <Badge className="bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800 font-medium">
+                        <Badge className="bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800 font-medium text-xs">
                             Direct
                         </Badge>
                     )}
                 </div>
 
                 {/* Flight Timeline */}
-                <div className="flex items-center gap-4 mb-6">
+                <div className="flex items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
                     {/* Departure */}
-                    <div className="flex-1">
-                        <div className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight font-display">
+                    <div className="flex-1 min-w-0">
+                        <div className="text-xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight font-display">
                             {format(depDate, 'HH:mm')}
                         </div>
-                        <div className="text-sm font-medium text-slate-600 dark:text-slate-400 mt-1">
+                        <div className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 mt-0.5 sm:mt-1">
                             {flight.departure.airport.code}
                         </div>
                         <div className="text-xs text-slate-400 dark:text-slate-500">
@@ -98,8 +98,8 @@ export function FlightCard({ flight }: { flight: Flight }) {
 
                     {/* Journey Visualization */}
                     <div className="flex-1 flex flex-col items-center py-2">
-                        <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 mb-2">
-                            <Clock className="w-3.5 h-3.5" />
+                        <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 mb-1 sm:mb-2">
+                            <Clock className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
                             <span className="font-medium">{durationString}</span>
                         </div>
                         <div className="w-full relative flex items-center">
@@ -110,20 +110,20 @@ export function FlightCard({ flight }: { flight: Flight }) {
                                     <div className="w-2 h-2 rounded-full bg-amber-400 dark:bg-amber-500 ring-2 ring-white dark:ring-slate-900" />
                                 </div>
                             )}
-                            <Plane className="w-4 h-4 text-indigo-600 dark:text-indigo-400 rotate-90 absolute left-1/2 -translate-x-1/2" />
+                            <Plane className="w-3 sm:w-4 h-3 sm:h-4 text-indigo-600 dark:text-indigo-400 rotate-90 absolute left-1/2 -translate-x-1/2" />
                             <Circle className="w-2 h-2 text-indigo-500 dark:text-indigo-400 fill-current absolute right-0" />
                         </div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 sm:mt-2">
                             {flight.stops === 0 ? 'Nonstop' : `${flight.stops} stop${flight.stops > 1 ? 's' : ''}`}
                         </div>
                     </div>
 
                     {/* Arrival */}
-                    <div className="flex-1 text-right">
-                        <div className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight font-display">
+                    <div className="flex-1 min-w-0 text-right">
+                        <div className="text-xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight font-display">
                             {format(arrDate, 'HH:mm')}
                         </div>
-                        <div className="text-sm font-medium text-slate-600 dark:text-slate-400 mt-1">
+                        <div className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 mt-0.5 sm:mt-1">
                             {flight.arrival.airport.code}
                         </div>
                         <div className="text-xs text-slate-400 dark:text-slate-500">
@@ -134,14 +134,14 @@ export function FlightCard({ flight }: { flight: Flight }) {
                 </div>
 
                 {/* Price & Action */}
-                <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700/50">
-                    <div>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pt-3 sm:pt-4 border-t border-slate-100 dark:border-slate-700/50 gap-3 sm:gap-0">
+                    <div className="w-full sm:w-auto">
                         <div className="text-xs text-slate-500 dark:text-slate-400 mb-1">Total price</div>
                         <div className="flex items-baseline gap-1">
-                            <span className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 font-display">
+                            <span className="text-2xl sm:text-3xl font-bold text-indigo-600 dark:text-indigo-400 font-display">
                                 ${effectivePrice.toFixed(0)}
                             </span>
-                            <span className="text-sm text-slate-500 dark:text-slate-400">USD</span>
+                            <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">USD</span>
                         </div>
                         <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                             {searchParams.passengers} passenger{searchParams.passengers > 1 ? 's' : ''} · {searchParams.cabinClass}
@@ -150,18 +150,18 @@ export function FlightCard({ flight }: { flight: Flight }) {
                             )}
                         </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20"
+                            className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 flex-1 sm:flex-none"
                             onClick={() => setExpanded(!expanded)}
                             disabled={!hasDetails}
                         >
                             {expanded ? 'Hide' : 'View'} details
                             <ChevronDown className={`w-4 h-4 ml-1 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} />
                         </Button>
-                        <Button className="px-8 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white shadow-sm hover:shadow-md transition-all group-hover:scale-105 transform duration-200">
+                        <Button className="px-6 sm:px-8 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white shadow-sm hover:shadow-md transition-all group-hover:scale-105 transform duration-200 flex-1 sm:flex-none text-sm sm:text-base">
                             Select
                         </Button>
                     </div>
