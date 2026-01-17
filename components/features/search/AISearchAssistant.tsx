@@ -30,6 +30,39 @@ export function AISearchAssistant({ onSearchIntent, className }: AISearchAssista
         "Business class to Paris in March"
     ]
 
+    const getContextualSuggestions = React.useCallback(() => {
+        if (messages.length === 0) return quickPrompts
+
+        const lastUserMessage = [...messages].reverse().find((msg) => msg.role === 'user')?.content
+        const lastIntent = [...messages].reverse().find((msg) => msg.intent)?.intent
+
+        const suggestions: string[] = []
+
+        if (lastIntent?.origin && lastIntent?.destination) {
+            suggestions.push(`Show me direct flights from ${lastIntent.origin} to ${lastIntent.destination}`)
+            suggestions.push(`Cheapest flights ${lastIntent.origin} → ${lastIntent.destination}`)
+        } else if (lastIntent?.destination) {
+            suggestions.push(`Best time to fly to ${lastIntent.destination}`)
+            suggestions.push(`Cheapest flights to ${lastIntent.destination}`)
+        } else if (lastIntent?.origin) {
+            suggestions.push(`Weekend getaways from ${lastIntent.origin}`)
+        }
+
+        if (lastIntent?.travelClass && lastIntent.travelClass !== 'ECONOMY') {
+            suggestions.push(`Any ${lastIntent.travelClass.toLowerCase()} deals?`)
+        }
+
+        if (lastIntent?.preferences?.some((pref) => pref.toLowerCase().includes('direct'))) {
+            suggestions.push('Only show nonstop options')
+        }
+
+        if (lastUserMessage && suggestions.length < 4) {
+            suggestions.push(`Refine: ${lastUserMessage}`)
+        }
+
+        return suggestions.length > 0 ? suggestions.slice(0, 6) : quickPrompts
+    }, [messages, quickPrompts])
+
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }
@@ -217,22 +250,43 @@ export function AISearchAssistant({ onSearchIntent, className }: AISearchAssista
                         <div ref={messagesEndRef} />
                     </div>
 
-                    {/* Quick prompts */}
-                    <div className="px-4 pb-2">
-                        <div className="flex flex-wrap gap-2">
-                            {quickPrompts.map((prompt) => (
-                                <button
-                                    key={prompt}
-                                    type="button"
-                                    onClick={() => sendMessage(prompt)}
-                                    disabled={loading}
-                                    className="px-3 py-1.5 text-xs font-medium rounded-full border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 transition disabled:opacity-50"
-                                >
-                                    {prompt}
-                                </button>
-                            ))}
+                    {/* Quick prompts (empty state) */}
+                    {messages.length === 0 && (
+                        <div className="px-4 pb-2">
+                            <div className="flex flex-wrap gap-2">
+                                {quickPrompts.map((prompt) => (
+                                    <button
+                                        key={prompt}
+                                        type="button"
+                                        onClick={() => sendMessage(prompt)}
+                                        disabled={loading}
+                                        className="px-3 py-1.5 text-xs font-medium rounded-full border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 transition disabled:opacity-50"
+                                    >
+                                        {prompt}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
+
+                    {/* Contextual carousel (after first message) */}
+                    {messages.length > 0 && (
+                        <div className="px-4 pb-2">
+                            <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap no-scrollbar">
+                                {getContextualSuggestions().map((prompt) => (
+                                    <button
+                                        key={prompt}
+                                        type="button"
+                                        onClick={() => sendMessage(prompt)}
+                                        disabled={loading}
+                                        className="shrink-0 px-3 py-1.5 text-xs font-medium rounded-full border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 transition disabled:opacity-50"
+                                    >
+                                        {prompt}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Input */}
                     <form onSubmit={handleSubmit} className="p-4 border-t border-slate-200 dark:border-slate-800">

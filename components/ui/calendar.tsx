@@ -11,6 +11,19 @@ import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "lucide-react"
 
+// Context to pass price data to calendar cells
+interface CalendarPriceContextValue {
+  prices: Record<string, number>
+  loading: boolean
+  formatDate: (date: Date) => string
+}
+
+const CalendarPriceContext = React.createContext<CalendarPriceContextValue | null>(null)
+
+export function useCalendarPrices() {
+  return React.useContext(CalendarPriceContext)
+}
+
 function Calendar({
   className,
   classNames,
@@ -19,17 +32,33 @@ function Calendar({
   buttonVariant = "ghost",
   formatters,
   components,
+  prices,
+  pricesLoading,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
   buttonVariant?: React.ComponentProps<typeof Button>["variant"]
+  prices?: Record<string, number>
+  pricesLoading?: boolean
 }) {
   const defaultClassNames = getDefaultClassNames()
 
-  return (
+  const formatDate = React.useCallback((date: Date) => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }, [])
+
+  const priceContextValue = React.useMemo(() => 
+    prices ? { prices, loading: pricesLoading ?? false, formatDate } : null,
+    [prices, pricesLoading, formatDate]
+  )
+
+  const calendar = (
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
-        "p-2 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)] bg-background group/calendar [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
+        "p-2 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)] bg-background group/calendar in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent",
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className
@@ -173,20 +202,52 @@ function Calendar({
       {...props}
     />
   )
+
+  if (priceContextValue) {
+    return (
+      <CalendarPriceContext.Provider value={priceContextValue}>
+        {calendar}
+      </CalendarPriceContext.Provider>
+    )
+  }
+
+  return calendar
 }
 
 function CalendarDayButton({
   className,
   day,
   modifiers,
+  children,
   ...props
 }: React.ComponentProps<typeof DayButton>) {
   const defaultClassNames = getDefaultClassNames()
+  const priceContext = useCalendarPrices()
 
   const ref = React.useRef<HTMLButtonElement>(null)
   React.useEffect(() => {
     if (modifiers.focused) ref.current?.focus()
   }, [modifiers.focused])
+
+  // Get price for this day
+  let priceDisplay: React.ReactNode = null
+  if (priceContext && !modifiers.outside && !modifiers.disabled) {
+    const dateKey = priceContext.formatDate(day.date)
+    const price = priceContext.prices[dateKey]
+    
+    if (price) {
+      const formatted = price >= 1000 ? `$${(price / 1000).toFixed(1)}K` : `$${Math.round(price)}`
+      priceDisplay = (
+        <span className="text-[9px] font-semibold text-emerald-600 dark:text-emerald-400 leading-none">
+          {formatted}
+        </span>
+      )
+    } else if (priceContext.loading) {
+      priceDisplay = (
+        <span className="text-[9px] text-slate-400 animate-pulse leading-none">···</span>
+      )
+    }
+  }
 
   return (
     <Button
@@ -203,13 +264,16 @@ function CalendarDayButton({
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
       className={cn(
-        "data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-foreground relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) [&>span]:text-xs [&>span]:opacity-70",
+        "data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-foreground relative isolate z-10 flex size-auto w-full min-w-(--cell-size) min-h-(--cell-size) flex-col items-center justify-center gap-0.5 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius)",
         defaultClassNames.day,
         className
       )}
       {...props}
-    />
+    >
+      <span className="text-sm leading-none">{day.date.getDate()}</span>
+      {priceDisplay}
+    </Button>
   )
 }
 
-export { Calendar, CalendarDayButton }
+export { Calendar, CalendarDayButton, CalendarPriceContext }

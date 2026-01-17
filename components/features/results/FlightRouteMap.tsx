@@ -316,9 +316,22 @@ async function fetchAirportCoordinates(airportCode: string): Promise<AirportCoor
                 .replace(/```json\n?/g, '')
                 .replace(/```\n?/g, '')
                 .trim()
-            
-            const coords = JSON.parse(cleanedResponse)
-            return coords
+
+            try {
+                return JSON.parse(cleanedResponse)
+            } catch (parseError) {
+                const normalizedResponse = cleanedResponse
+                    // Remove leading zeros from numeric values (e.g., 002.384 -> 2.384)
+                    .replace(/:\s*([+-]?)0+(\d+(?:\.\d+)?)/g, ': $1$2')
+                    .replace(/([,\[]\s*)([+-]?)0+(\d+(?:\.\d+)?)/g, '$1$2$3')
+
+                try {
+                    return JSON.parse(normalizedResponse)
+                } catch (secondParseError) {
+                    console.error('Failed to parse AI response:', data.response)
+                    return null
+                }
+            }
         } catch (parseError) {
             console.error('Failed to parse AI response:', data.response)
             return null

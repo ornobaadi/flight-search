@@ -2,10 +2,12 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { format } from "date-fns"
-import { Calendar as CalendarIcon, Search, ArrowRightLeft, Users, Plane, PlaneTakeoff, PlaneLanding, Sparkles, Armchair, CircleDot, Briefcase, Crown } from "lucide-react"
+import { format, differenceInDays } from "date-fns"
+import { Calendar as CalendarIcon, Search, ArrowRightLeft, Users, Plane, PlaneTakeoff, PlaneLanding, Sparkles, Armchair, CircleDot, Briefcase, Crown, ChevronLeft, ChevronRight } from "lucide-react"
+import type { DateRange } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
     Popover,
@@ -31,10 +33,19 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, {}>(functi
     const [destinationDisplay, setDestinationDisplay] = React.useState<string>("")
     const [date, setDate] = React.useState<Date | undefined>(undefined)
     const [returnDate, setReturnDate] = React.useState<Date | undefined>(undefined)
+    const [dateRange, setDateRange] = React.useState<DateRange | undefined>(undefined)
 
     const [passengers, setPassengers] = React.useState(1)
     const [tripType, setTripType] = React.useState<"one-way" | "round-trip">("round-trip")
     const [cabin, setCabin] = React.useState<"Economy" | "Premium Economy" | "Business" | "First">("Economy")
+
+    const [calendarMonth, setCalendarMonth] = React.useState<Date>(new Date())
+    const [priceCalendar, setPriceCalendar] = React.useState<Record<string, number>>({})
+    const [priceCalendarLoading, setPriceCalendarLoading] = React.useState(false)
+    const [datePopoverOpen, setDatePopoverOpen] = React.useState(false)
+    
+    // Trip duration for round-trip pricing (in days)
+    const [tripDuration, setTripDuration] = React.useState(7)
 
     const handleSearch = () => {
         if (!origin || !destination || !date) return
@@ -59,6 +70,63 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, {}>(functi
     }
 
     const isValid = origin && destination && date && (tripType === "one-way" || returnDate);
+
+    // Reset return date when switching to one-way
+    React.useEffect(() => {
+        if (tripType === "one-way") {
+            setReturnDate(undefined)
+            setDateRange(undefined)
+        } else if (date && !dateRange) {
+            // Switching to round-trip with existing departure date
+            setDateRange({ from: date, to: undefined })
+        }
+    }, [tripType])
+
+    // Sync date with dateRange for round-trip
+    React.useEffect(() => {
+        if (tripType === "round-trip" && dateRange) {
+            setDate(dateRange.from)
+            setReturnDate(dateRange.to)
+        }
+    }, [dateRange, tripType])
+
+    React.useEffect(() => {
+        if (date) {
+            setCalendarMonth(date)
+        }
+    }, [date])
+
+    React.useEffect(() => {
+        if (!origin || !destination) {
+            setPriceCalendar({})
+            return
+        }
+
+        const timeout = window.setTimeout(async () => {
+            try {
+                setPriceCalendarLoading(true)
+                const month = format(calendarMonth, "yyyy-MM")
+                const response = await fetch(
+                    `/api/prices/calendar?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(
+                        destination
+                    )}&month=${month}&tripType=${tripType}&tripDuration=${tripDuration}`
+                )
+
+                const data = await response.json()
+                if (response.ok && data.prices) {
+                    setPriceCalendar(data.prices)
+                } else {
+                    setPriceCalendar({})
+                }
+            } catch {
+                setPriceCalendar({})
+            } finally {
+                setPriceCalendarLoading(false)
+            }
+        }, 350)
+
+        return () => window.clearTimeout(timeout)
+    }, [origin, destination, calendarMonth, tripType, tripDuration])
 
     const handleSwap = () => {
         const tempCode = origin
@@ -85,11 +153,14 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, {}>(functi
             }
             
             // Apply departure date
+            let parsedDepartureDate: Date | undefined
             if (intent.departureDate) {
                 try {
-                    const parsedDate = new Date(intent.departureDate)
-                    if (!isNaN(parsedDate.getTime())) {
-                        setDate(parsedDate)
+                    parsedDepartureDate = new Date(intent.departureDate)
+                    if (!isNaN(parsedDepartureDate.getTime())) {
+                        setDate(parsedDepartureDate)
+                    } else {
+                        parsedDepartureDate = undefined
                     }
                 } catch (e) {
                     console.error('Invalid departure date:', intent.departureDate)
@@ -103,12 +174,18 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, {}>(functi
                     if (!isNaN(parsedReturnDate.getTime())) {
                         setReturnDate(parsedReturnDate)
                         setTripType('round-trip')
+                        // Set date range for the single calendar
+                        setDateRange({
+                            from: parsedDepartureDate,
+                            to: parsedReturnDate
+                        })
                     }
                 } catch (e) {
                     console.error('Invalid return date:', intent.returnDate)
                 }
             } else if (intent.departureDate && !intent.returnDate) {
                 setTripType('one-way')
+                setDateRange(undefined)
             }
             
             // Apply passengers
@@ -237,92 +314,189 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, {}>(functi
                         </div>
 
                         {/* Dates Section */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {/* Departure Date */}
-                            <div className="space-y-2">
-                                <label className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 ml-1">
-                                    <CalendarIcon className="w-3.5 h-3.5" />
-                                    DEPARTURE DATE
-                                </label>
-                                <Popover>
-                                    <PopoverTrigger
-                                        className={cn(
-                                                "w-full h-16 px-5 rounded-lg border transition-all duration-200 text-left hover:bg-slate-50 dark:hover:bg-slate-900",
-                                                date
-                                                    ? "bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                                                    : "bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800"
-                                            )}
-                                        >
+                        <div className="space-y-2">
+                            <label className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 ml-1">
+                                <CalendarIcon className="w-3.5 h-3.5" />
+                                {tripType === "round-trip" ? "TRAVEL DATES" : "TRAVEL DATE"}
+                            </label>
+                            <Popover open={datePopoverOpen} onOpenChange={setDatePopoverOpen}>
+                                <PopoverTrigger
+                                    className={cn(
+                                        "w-full h-16 px-5 rounded-lg border transition-all duration-200 text-left hover:bg-slate-50 dark:hover:bg-slate-900",
+                                        (tripType === "round-trip" ? dateRange?.from : date)
+                                            ? "bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
+                                            : "bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                                    )}
+                                >
+                                    {tripType === "round-trip" ? (
+                                        <div className="flex items-center gap-4">
                                             <div className="flex flex-col gap-1">
-                                                {date ? (
+                                                {dateRange?.from ? (
                                                     <>
                                                         <span className="text-lg font-semibold text-slate-900 dark:text-white">
-                                                            {format(date, "MMM d, yyyy")}
+                                                            {format(dateRange.from, "MMM d")}
                                                         </span>
                                                         <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                                                            {format(date, "EEEE")}
+                                                            {format(dateRange.from, "EEE")}
                                                         </span>
                                                     </>
                                                 ) : (
-                                                    <span className="text-slate-400 dark:text-slate-500">Select date</span>
+                                                    <span className="text-slate-400 dark:text-slate-500">Departure</span>
                                                 )}
                                             </div>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0" align="start">
-                                        <Calendar
-                                            mode="single"
-                                            selected={date}
-                                            onSelect={setDate}
-                                            disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
-                                            initialFocus
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-                            </div>
-
-                            {/* Return Date */}
-                            {tripType === "round-trip" && (
-                                <div className="space-y-2">
-                                    <label className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 ml-1">
-                                        <CalendarIcon className="w-3.5 h-3.5" />
-                                        RETURN DATE
-                                    </label>
-                                    <Popover>
-                                        <PopoverTrigger
-                                            className={cn(
-                                                    "w-full h-16 px-5 rounded-lg border transition-all duration-200 text-left hover:bg-slate-50 dark:hover:bg-slate-900",
-                                                    returnDate
-                                                        ? "bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                                                        : "bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800"
+                                            <div className="text-slate-300 dark:text-slate-600">→</div>
+                                            <div className="flex flex-col gap-1">
+                                                {dateRange?.to ? (
+                                                    <>
+                                                        <span className="text-lg font-semibold text-slate-900 dark:text-white">
+                                                            {format(dateRange.to, "MMM d")}
+                                                        </span>
+                                                        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                                                            {format(dateRange.to, "EEE")}
+                                                            {dateRange.from && (
+                                                                <span className="ml-1 text-indigo-600 dark:text-indigo-400">
+                                                                    ({differenceInDays(dateRange.to, dateRange.from)} nights)
+                                                                </span>
+                                                            )}
+                                                        </span>
+                                                    </>
+                                                ) : (
+                                                    <span className="text-slate-400 dark:text-slate-500">Return</span>
                                                 )}
-                                            >
-                                                <div className="flex flex-col gap-1">
-                                                    {returnDate ? (
-                                                        <>
-                                                            <span className="text-lg font-semibold text-slate-900 dark:text-white">
-                                                                {format(returnDate, "MMM d, yyyy")}
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-col gap-1">
+                                            {date ? (
+                                                <>
+                                                    <span className="text-lg font-semibold text-slate-900 dark:text-white">
+                                                        {format(date, "MMM d, yyyy")}
+                                                    </span>
+                                                    <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                                                        {format(date, "EEEE")}
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                <span className="text-slate-400 dark:text-slate-500">Select date</span>
+                                            )}
+                                        </div>
+                                    )}
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0" align="start">
+                                    {tripType === "round-trip" ? (
+                                        <div className="flex flex-col">
+                                            {/* Trip Duration Selector - Like Google Flights */}
+                                            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-700">
+                                                <span className="text-sm text-slate-600 dark:text-slate-400">
+                                                    Showing prices for
+                                                </span>
+                                                <div className="flex items-center gap-1">
+                                                    <button
+                                                        onClick={() => setTripDuration(Math.max(1, tripDuration - 1))}
+                                                        className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400"
+                                                    >
+                                                        <ChevronLeft className="w-4 h-4" />
+                                                    </button>
+                                                    <span className="text-sm font-medium text-slate-900 dark:text-white min-w-20 text-center">
+                                                        {tripDuration} day{tripDuration !== 1 ? 's' : ''} trip
+                                                    </span>
+                                                    <button
+                                                        onClick={() => setTripDuration(Math.min(30, tripDuration + 1))}
+                                                        className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400"
+                                                    >
+                                                        <ChevronRight className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            
+                                            <Calendar
+                                                mode="range"
+                                                selected={dateRange}
+                                                onSelect={setDateRange}
+                                                disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
+                                                numberOfMonths={2}
+                                                className="p-4 [--cell-size:--spacing(12)]"
+                                                month={calendarMonth}
+                                                onMonthChange={setCalendarMonth}
+                                                prices={origin && destination ? priceCalendar : undefined}
+                                                pricesLoading={priceCalendarLoading}
+                                            />
+                                            
+                                            {/* Footer with price summary and Done button */}
+                                            <div className="flex items-center justify-between px-4 py-3 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+                                                <div className="text-sm">
+                                                    {dateRange?.from && priceCalendar[format(dateRange.from, 'yyyy-MM-dd')] ? (
+                                                        <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
+                                                            from ${priceCalendar[format(dateRange.from, 'yyyy-MM-dd')].toLocaleString()}
+                                                            <span className="text-slate-500 dark:text-slate-400 font-normal ml-1">
+                                                                round trip
                                                             </span>
-                                                            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                                                                {format(returnDate, "EEEE")}
-                                                            </span>
-                                                        </>
+                                                        </span>
                                                     ) : (
-                                                        <span className="text-slate-400 dark:text-slate-500">Select date</span>
+                                                        <span className="text-slate-500 dark:text-slate-400">
+                                                            {!dateRange?.from 
+                                                                ? "Select departure date"
+                                                                : !dateRange?.to
+                                                                    ? "Now select return date"
+                                                                    : priceCalendarLoading 
+                                                                        ? "Loading prices..."
+                                                                        : "Select dates to see prices"}
+                                                        </span>
                                                     )}
                                                 </div>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-auto p-0" align="start">
+                                                <Button
+                                                    onClick={() => setDatePopoverOpen(false)}
+                                                    size="lg"
+                                                >
+                                                    Done
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-col">
                                             <Calendar
                                                 mode="single"
-                                                selected={returnDate}
-                                                onSelect={setReturnDate}
-                                                disabled={(d) => d < (date || new Date())}
-                                                initialFocus
+                                                selected={date}
+                                                onSelect={setDate}
+                                                disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
+                                                className="p-4 [--cell-size:--spacing(12)]"
+                                                month={calendarMonth}
+                                                onMonthChange={setCalendarMonth}
+                                                prices={origin && destination ? priceCalendar : undefined}
+                                                pricesLoading={priceCalendarLoading}
                                             />
-                                        </PopoverContent>
-                                    </Popover>
-                                </div>
-                            )}
+                                            
+                                            {/* Footer with price and Done button */}
+                                            <div className="flex items-center justify-between px-4 py-3 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+                                                <div className="text-sm">
+                                                    {date && priceCalendar[format(date, 'yyyy-MM-dd')] ? (
+                                                        <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
+                                                            from ${priceCalendar[format(date, 'yyyy-MM-dd')].toLocaleString()}
+                                                            <span className="text-slate-500 dark:text-slate-400 font-normal ml-1">
+                                                                one way
+                                                            </span>
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-slate-500 dark:text-slate-400">
+                                                            {priceCalendarLoading 
+                                                                ? "Loading prices…" 
+                                                                : origin && destination 
+                                                                    ? "One-way prices shown"
+                                                                    : "Select origin & destination"}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <Button
+                                                    onClick={() => setDatePopoverOpen(false)}
+                                                    size="lg"
+                                                >
+                                                    Done
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </PopoverContent>
+                            </Popover>
                         </div>
                     </div>
 
