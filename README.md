@@ -1,19 +1,42 @@
-# SkyScout - Flight Search Engine
+<div align="center">
+  <img src="public/thumbnail.webp" alt="SkyScout Flight Search" width="800" />
+  
+  # ✈️ SkyScout - Flight Search Engine
+  
+  <p align="center">
+    <strong>A modern, user-friendly flight booking platform</strong>
+  </p>
+  
+  <p align="center">
+    Find and compare the best flight deals from hundreds of airlines worldwide
+  </p>
+  
+  <p align="center">
+    Built with Next.js 16 • TypeScript • Tailwind CSS • Amadeus API
+  </p>
+  
+  <p align="center">
+    <a href="#features">Features</a> •
+    <a href="#tech-stack">Tech Stack</a> •
+    <a href="#getting-started">Getting Started</a> •
+    <a href="#api-routes">API Routes</a>
+  </p>
+</div>
 
-SkyScout is a modern, user-friendly flight booking platform that helps travelers find and compare the best flight deals from hundreds of airlines worldwide. Built with Next.js 16, TypeScript, Tailwind CSS, and powered by the Amadeus API.
+---
 
-## Features
+## ✨ Features
 
-- **Real-time Flight Search**: Search flights by origin, destination, dates, and passengers
-- **Smart Location Input**: Fast autocomplete with popular airports and instant search
-- **Live Flight Data**: Powered by Amadeus API for accurate, real-time flight information
-- **Instant Filtering**: Filter by price, stops, and airlines with immediate results
-- **Interactive Price Charts**: Visualize price trends with responsive charts
-- **Modern UI**: Clean, shadcn-compliant design with smooth animations
-- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
-- **Dark Mode Support**: Seamless light and dark theme switching
+- 🔍 **Real-time Flight Search**: Search flights by origin, destination, dates, and passengers
+- 🌍 **Smart Location Input**: Fast autocomplete with popular airports and instant search
+- ✈️ **Live Flight Data**: Powered by Amadeus API for accurate, real-time flight information
+- 🎯 **Instant Filtering**: Filter by price, stops, and airlines with immediate results
+- 📊 **Interactive Price Charts**: Visualize price trends with responsive charts
+- 🎨 **Modern UI**: Clean, shadcn-compliant design with smooth animations
+- 📱 **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- 🌙 **Dark Mode Support**: Seamless light and dark theme switching
 
-## Tech Stack
+## 🚀 Tech Stack
 
 - **Framework**: Next.js 16.1.2 (App Router, Turbopack)
 - **Language**: TypeScript
@@ -25,7 +48,7 @@ SkyScout is a modern, user-friendly flight booking platform that helps travelers
 - **Date Handling**: date-fns
 - **UI Components**: Base UI React
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 ├── app/                    # Next.js App Router
@@ -45,15 +68,15 @@ SkyScout is a modern, user-friendly flight booking platform that helps travelers
 └── public/                # Static assets (favicon, manifest)
 ```
 
-## Getting Started
+## 🏁 Getting Started
 
-### Prerequisites
+### 📋 Prerequisites
 
 - Node.js 18+ 
-- npm or yarn
+- npm, yarn, or pnpm
 - Amadeus API credentials ([Get free test credentials](https://developers.amadeus.com/))
 
-### Installation
+### 🔧 Installation
 
 1.  **Clone the repository**:
     ```bash
@@ -81,26 +104,26 @@ SkyScout is a modern, user-friendly flight booking platform that helps travelers
 5.  **Open the app**:
     Visit [http://localhost:3000](http://localhost:3000)
 
-### Build for Production
+### 🏗️ Build for Production
 
 ```bash
 npm run build
 npm start
 ```
 
-## API Routes
+## 🔌 API Routes
 
 - `GET /api/locations?keyword={query}` - Search for airports and cities
 - `GET /api/flights?origin={code}&destination={code}&date={date}` - Search for flights
 
-## Environment Variables
+## 🌐 Environment Variables
 
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `AMADEUS_CLIENT_ID` | Your Amadeus API Client ID | Yes |
 | `AMADEUS_CLIENT_SECRET` | Your Amadeus API Client Secret | Yes |
 
-## SEO Features
+## 🔍 SEO Features
 
 - Comprehensive metadata with Open Graph and Twitter Card support
 - Sitemap generation for search engines
@@ -108,17 +131,27 @@ npm start
 - Semantic HTML structure
 - Progressive Web App (PWA) support via manifest.json
 
-## Security
+## 🔒 Security
 
 - API credentials stored in environment variables (never committed)
 - Server-side API calls only (credentials never exposed to client)
 - Development-only error logging
 - Sanitized error messages in production
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## License
+## 📄 License
 
 MIT
+
+---
+
+<div align="center">
+  <p>Made with ❤️ by the SkyScout team</p>
+  <p>
+    <a href="https://github.com/yourusername/skyscout/issues">Report Bug</a> •
+    <a href="https://github.com/yourusername/skyscout/issues">Request Feature</a>
+  </p>
+</div>
