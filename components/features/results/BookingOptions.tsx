@@ -212,13 +212,13 @@ export function BookingOptions({ flight, searchParams }: BookingOptionsProps) {
                             key={provider.id}
                             className={`relative group rounded-xl border transition-all duration-200 ${
                                 provider.isBestPrice
-                                    ? 'border-green-300 dark:border-green-700 bg-green-50/50 dark:bg-green-900/10'
+                                    ? 'border-emerald-300 dark:border-emerald-700 bg-emerald-50/50 dark:bg-emerald-900/10'
                                     : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 hover:border-indigo-300 dark:hover:border-indigo-700'
                             }`}
                         >
                             {provider.isBestPrice && (
                                 <div className="absolute -top-3 left-4">
-                                    <Badge className="bg-green-500 text-white border-0 shadow-sm">
+                                    <Badge className="bg-emerald-600 text-white border-0 shadow-sm">
                                         <CheckCircle2 className="w-3 h-3 mr-1" />
                                         Lowest price
                                     </Badge>
@@ -264,7 +264,7 @@ export function BookingOptions({ flight, searchParams }: BookingOptionsProps) {
                                                             key={idx}
                                                             className="text-xs text-slate-600 dark:text-slate-400 flex items-center gap-1"
                                                         >
-                                                            <CheckCircle2 className="w-3 h-3 text-green-600 dark:text-green-400" />
+                                                            <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                                                             {benefit}
                                                         </span>
                                                     ))}
@@ -296,7 +296,7 @@ export function BookingOptions({ flight, searchParams }: BookingOptionsProps) {
                                             <Button
                                                 className={`px-6 py-2 shadow-sm hover:shadow-md transition-all ${
                                                     provider.isBestPrice
-                                                        ? 'bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600'
+                                                        ? 'bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-700'
                                                         : 'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600'
                                                 } text-white`}
                                             >

@@ -82,7 +82,7 @@ export function FlightDetails({ flight, searchParams }: FlightDetailsProps) {
                         </p>
                     </div>
                     {flight.stops === 0 && (
-                        <Badge className="ml-auto bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800">
+                        <Badge className="ml-auto bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800">
                             Direct flight
                         </Badge>
                     )}
@@ -219,7 +219,7 @@ export function FlightDetails({ flight, searchParams }: FlightDetailsProps) {
                             variant="ghost"
                             onClick={() => setShowDetails(!showDetails)}
                             className="w-full text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20"
-                        >6 pt-6
+                        >
                             {showDetails ? 'Hide' : 'View'} detailed flight information
                             <ChevronDown className={`w-4 h-4 ml-2 transition-transform duration-200 ${showDetails ? 'rotate-180' : ''}`} />
                         </Button>
@@ -227,7 +227,7 @@ export function FlightDetails({ flight, searchParams }: FlightDetailsProps) {
                 )}
             </CardContent>
 
-            {/* Collapsible Detailed Information */}
+            {/* Collapsible  Information */}
             {showDetails && hasDetails && (
                 <div className="border-t border-slate-200/50 dark:border-slate-700/50 bg-linear-to-br from-slate-50/50 to-slate-100/50 dark:from-slate-800/30 dark:to-slate-900/30 p-4 backdrop-blur-sm">
                     <div className="flex items-center gap-2 mb-4 text-slate-700 dark:text-slate-300">
