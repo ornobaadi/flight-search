@@ -34,6 +34,7 @@ import { useSearchStore } from "@/store/use-search-store"
 import { LocationInput } from "./LocationInput"
 import { Skeleton } from "@/components/ui/skeleton"
 import type { CabinClass } from "@/lib/api/types"
+import { FlightSearchIntent } from "@/lib/ai-types"
 
 interface InlineSearchFormProps {
     defaultExpanded?: boolean
@@ -41,7 +42,10 @@ interface InlineSearchFormProps {
     embedded?: boolean  // When true, skips collapsed state and header - used when embedded in navbar dropdown
 }
 
-export function InlineSearchForm({ defaultExpanded = false, onSearchStart, embedded = false }: InlineSearchFormProps) {
+export const InlineSearchForm = React.forwardRef<
+    { applyAIIntent: (intent: FlightSearchIntent) => void },
+    InlineSearchFormProps
+>(({ defaultExpanded = false, onSearchStart, embedded = false }, ref) => {
     const router = useRouter()
     const currentSearchParams = useSearchParams()
     const { searchParams, setSearchParams, searchFlights, isLoading } = useSearchStore()
@@ -71,6 +75,81 @@ export function InlineSearchForm({ defaultExpanded = false, onSearchStart, embed
     const [priceCalendar, setPriceCalendar] = React.useState<Record<string, number>>({})
     const [priceCalendarLoading, setPriceCalendarLoading] = React.useState(false)
     const [tripDuration, setTripDuration] = React.useState(7)
+
+    // Expose method to parent via ref
+    React.useImperativeHandle(ref, () => ({
+        applyAIIntent: (intent: FlightSearchIntent) => {
+            // Apply origin
+            if (intent.origin) {
+                setOrigin(intent.origin)
+                setOriginDisplay(intent.origin)
+            }
+            
+            // Apply destination
+            if (intent.destination) {
+                setDestination(intent.destination)
+                setDestinationDisplay(intent.destination)
+            }
+            
+            // Apply departure date
+            let parsedDepartureDate: Date | undefined
+            if (intent.departureDate) {
+                try {
+                    parsedDepartureDate = new Date(intent.departureDate)
+                    if (!isNaN(parsedDepartureDate.getTime())) {
+                        setDate(parsedDepartureDate)
+                    } else {
+                        parsedDepartureDate = undefined
+                    }
+                } catch {
+                    console.error('Invalid departure date:', intent.departureDate)
+                }
+            }
+            
+            // Apply return date
+            if (intent.returnDate) {
+                try {
+                    const parsedReturnDate = new Date(intent.returnDate)
+                    if (!isNaN(parsedReturnDate.getTime())) {
+                        setReturnDate(parsedReturnDate)
+                        setTripType('round-trip')
+                        // Set date range for the single calendar
+                        setDateRange({
+                            from: parsedDepartureDate,
+                            to: parsedReturnDate
+                        })
+                    }
+                } catch {
+                    console.error('Invalid return date:', intent.returnDate)
+                }
+            } else if (intent.departureDate && !intent.returnDate) {
+                setTripType('one-way')
+                setReturnDate(undefined)
+                setDateRange(parsedDepartureDate ? { from: parsedDepartureDate, to: undefined } : undefined)
+            }
+            
+            // Apply passengers
+            if (intent.adults) {
+                setPassengers(intent.adults)
+            }
+            
+            // Apply cabin class
+            if (intent.travelClass) {
+                // Map travelClass to CabinClass type
+                const cabinMap: Record<string, CabinClass> = {
+                    'ECONOMY': 'Economy',
+                    'PREMIUM_ECONOMY': 'Premium Economy',
+                    'BUSINESS': 'Business',
+                    'FIRST': 'First'
+                }
+                const mappedCabin = cabinMap[intent.travelClass] || intent.travelClass as CabinClass
+                setCabin(mappedCabin)
+            }
+
+            // Expand form to show applied changes
+            setIsExpanded(true)
+        }
+    }))
 
     // Sync from URL params on mount
     React.useEffect(() => {
@@ -660,7 +739,9 @@ export function InlineSearchForm({ defaultExpanded = false, onSearchStart, embed
             </div>
         </div>
     )
-}
+})
+
+InlineSearchForm.displayName = 'InlineSearchForm'
 
 // Skeleton loader for the inline search form
 export function InlineSearchFormSkeleton() {

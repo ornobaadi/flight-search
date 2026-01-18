@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, Suspense } from "react"
+import { useEffect, useState, Suspense, useRef } from "react"
 import { useSearchStore } from "@/store/use-search-store"
 import { FilterSidebar } from "./FilterSidebar"
 import { PriceChart } from "./PriceChart"
@@ -8,6 +8,7 @@ import { FlightList } from "./FlightList"
 import { FlightRouteMap } from "./FlightRouteMap"
 import { SearchHeader } from "@/components/layout/SearchHeader"
 import { InlineSearchForm, InlineSearchFormSkeleton } from "@/components/features/search/InlineSearchForm"
+import { AISearchAssistant } from "@/components/features/search/AISearchAssistant"
 import { Button } from "@/components/ui/button"
 import { Filter } from "lucide-react"
 import {
@@ -18,6 +19,7 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import type { CabinClass } from "@/lib/api/types"
+import { FlightSearchIntent } from "@/lib/ai-types"
 
 export function SearchResultsPage({
     initialOrigin,
@@ -38,6 +40,7 @@ export function SearchResultsPage({
     const isLoading = useSearchStore((state) => state.isLoading)
     const [mounted, setMounted] = useState(false)
     const [isSearchExpanded, setIsSearchExpanded] = useState(false)
+    const searchFormRef = useRef<{ applyAIIntent: (intent: FlightSearchIntent) => void }>(null)
 
     useEffect(() => {
         setMounted(true)
@@ -69,6 +72,13 @@ export function SearchResultsPage({
         setIsSearchExpanded(false)
     }
 
+    const handleAIIntent = (intent: FlightSearchIntent) => {
+        if (searchFormRef.current) {
+            searchFormRef.current.applyAIIntent(intent)
+            setIsSearchExpanded(true) // Expand the search form to show the AI's changes
+        }
+    }
+
     return (
         <div className="min-h-screen bg-linear-to-br from-indigo-50/30 via-white to-blue-50/30 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-950">
             <SearchHeader 
@@ -82,7 +92,7 @@ export function SearchResultsPage({
                 <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-700/50 shadow-lg animate-in slide-in-from-top duration-200">
                     <div className="container mx-auto max-w-7xl px-3 sm:px-4 py-4">
                         <Suspense fallback={<InlineSearchFormSkeleton />}>
-                            <InlineSearchForm defaultExpanded={true} onSearchStart={handleSearchComplete} embedded={true} />
+                            <InlineSearchForm ref={searchFormRef} defaultExpanded={true} onSearchStart={handleSearchComplete} embedded={true} />
                         </Suspense>
                     </div>
                 </div>
@@ -158,6 +168,12 @@ export function SearchResultsPage({
                     </div>
                 </div>
             </main>
+
+            {/* AI Search Assistant */}
+            <AISearchAssistant
+                onSearchIntent={handleAIIntent}
+                className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50"
+            />
         </div>
     )
 }

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { FlightDetails } from "@/components/features/results/FlightDetails";
 import { BookingOptions } from "@/components/features/results/BookingOptions";
+import { SearchHeader } from "@/components/layout/SearchHeader";
 
 export default function BookingPage() {
     const params = useParams();
@@ -18,6 +19,7 @@ export default function BookingPage() {
     if (!flight) {
         return (
             <div className="min-h-screen bg-linear-to-br from-indigo-50/30 via-white to-blue-50/30 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-950">
+                <SearchHeader />
                 <div className="container mx-auto max-w-7xl px-3 sm:px-4 py-3 sm:py-4">
                     <Button 
                         variant="ghost" 
@@ -42,6 +44,7 @@ export default function BookingPage() {
 
     return (
         <div className="min-h-screen bg-linear-to-br from-indigo-50/30 via-white to-blue-50/30 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-950">
+            <SearchHeader />
             <div className="container mx-auto max-w-7xl px-3 sm:px-4 py-3 sm:py-4">
                 {/* Back Button */}
                 <Button 
