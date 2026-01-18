@@ -527,10 +527,10 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                         </div>
                     </div>
 
-                    {/* Passengers & Cabin */}
-                    <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
+                    {/* Passengers & Cabin - Full Width Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                         <Popover>
-                            <PopoverTrigger className="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-colors flex-1 sm:flex-none">
+                            <PopoverTrigger className="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-colors w-full">
                                     <Users className="w-4 sm:w-5 h-4 sm:h-5 text-slate-600 dark:text-slate-400" />
                                     <div className="flex flex-col items-start">
                                         <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Travelers</span>
@@ -563,7 +563,7 @@ export const FlightSearchForm = React.forwardRef<FlightSearchFormRef, FlightSear
                         </Popover>
 
                         <Popover>
-                            <PopoverTrigger className="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-colors flex-1 sm:flex-none">
+                            <PopoverTrigger className="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-colors w-full">
                                 <Sparkles className="w-4 sm:w-5 h-4 sm:h-5 text-slate-600 dark:text-slate-400" />
                                 <div className="flex flex-col items-start">
                                     <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Class</span>
