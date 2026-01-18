@@ -1,22 +1,10 @@
 "use client"
 
 import * as React from "react"
-import { Check, Plane, MapPin, Loader2, ChevronDown, Globe, Sparkles } from "lucide-react"
+import { Check, Plane, MapPin, Loader2, ChevronDown, Globe } from "lucide-react"
 import { useDebounce } from "use-debounce"
 
 import { cn } from "@/lib/utils"
-import {
-    Command,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-} from "@/components/ui/command"
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
 
 interface Location {
     code: string;
@@ -49,13 +37,13 @@ export function LocationInput({ value, onChange, onSelect, displayValue, onDispl
     const [relevanceScores, setRelevanceScores] = React.useState<Record<string, number>>({})
     const [aiInsight, setAiInsight] = React.useState<any>(null)
     const [suggestions, setSuggestions] = React.useState<string[]>([])
+    const inputRef = React.useRef<HTMLInputElement>(null)
+    const containerRef = React.useRef<HTMLDivElement>(null)
     const [popularAirports] = React.useState<Location[]>([
         { code: 'JFK', name: 'John F Kennedy International Airport', city: 'New York', country: 'United States', type: 'AIRPORT' },
         { code: 'LAX', name: 'Los Angeles International Airport', city: 'Los Angeles', country: 'United States', type: 'AIRPORT' },
         { code: 'LHR', name: 'London Heathrow Airport', city: 'London', country: 'United Kingdom', type: 'AIRPORT' },
         { code: 'CDG', name: 'Charles de Gaulle Airport', city: 'Paris', country: 'France', type: 'AIRPORT' },
-        { code: 'DXB', name: 'Dubai International Airport', city: 'Dubai', country: 'United Arab Emirates', type: 'AIRPORT' },
-        { code: 'ORD', name: 'O\'Hare International Airport', city: 'Chicago', country: 'United States', type: 'AIRPORT' },
     ])
 
     // Group results by country
@@ -162,57 +150,74 @@ export function LocationInput({ value, onChange, onSelect, displayValue, onDispl
         })
     }
 
+    // Close dropdown when clicking outside
+    React.useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setOpen(false)
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [])
+
+    // Handle keyboard navigation
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Escape') {
+            setOpen(false)
+            inputRef.current?.blur()
+        }
+    }
+
+    // Get display text for the input
+    const getInputDisplayValue = () => {
+        if (inputValue) return inputValue
+        if (value && displayValue) return displayValue
+        return ""
+    }
+
     return (
-        <div className={cn("relative w-full", className)}>
-            <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger
-                    className={cn(
-                        "flex items-center gap-3 w-full h-16 px-5 rounded-lg border transition-all cursor-pointer text-left",
-                        "hover:bg-slate-50 dark:hover:bg-slate-900",
-                        value && displayValue
-                            ? "bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                            : "bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800",
-                        open && "ring-2 ring-slate-400 dark:ring-slate-600"
+        <div ref={containerRef} className={cn("relative w-full", className)}>
+            {/* Input Field */}
+            <div
+                onClick={() => inputRef.current?.focus()}
+                className={cn(
+                    "flex items-center gap-3 w-full h-16 px-5 rounded-lg border transition-all cursor-text",
+                    "hover:bg-slate-50 dark:hover:bg-slate-900",
+                    value && displayValue && !inputValue
+                        ? "bg-slate-50 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
+                        : "bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800",
+                    open && "ring-0 ring-violet-500 border-violet-500"
+                )}
+            >
+                <MapPin className="w-5 h-5 text-slate-400 dark:text-slate-500 shrink-0" />
+                <div className="flex flex-col gap-0.5 flex-1 min-w-0">
+                    <input
+                        ref={inputRef}
+                        type="text"
+                        placeholder={placeholder || "City or airport"}
+                        value={getInputDisplayValue()}
+                        onChange={(e) => {
+                            setInputValue(e.target.value)
+                            if (!open) setOpen(true)
+                        }}
+                        onFocus={() => setOpen(true)}
+                        onKeyDown={handleKeyDown}
+                        className="w-full text-base font-medium text-slate-900 dark:text-white bg-transparent outline-none placeholder:text-slate-400 placeholder:font-normal"
+                        autoComplete="off"
+                    />
+                    {value && !inputValue && (
+                        <span className="text-xs text-slate-500 dark:text-slate-400">
+                            {value}
+                        </span>
                     )}
-                >
-                    <MapPin className="w-5 h-5 text-slate-400 dark:text-slate-500 shrink-0" />
-                    <div className="flex flex-col gap-1 flex-1 min-w-0">
-                        {value && displayValue ? (
-                            <>
-                                <span className="text-base font-semibold text-slate-900 dark:text-white truncate">
-                                    {displayValue}
-                                </span>
-                                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                                    {value}
-                                </span>
-                            </>
-                        ) : (
-                            <span className="text-slate-400 dark:text-slate-500">
-                                {placeholder || "Select location"}
-                            </span>
-                        )}
-                    </div>
-                </PopoverTrigger>
+                </div>
+            </div>
 
-                <PopoverContent className="p-0 w-[420px] shadow-xl" side="bottom" align="start" sideOffset={8}>
-                    <Command shouldFilter={false} className="rounded-lg">
-                        <div className="relative">
-                            <SearchIcon className="absolute left-4 top-3.5 h-4 w-4 text-slate-400" />
-                            <input
-                                placeholder="City, airport, or country..."
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                                className="w-full h-12 pl-11 pr-4 text-sm bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 outline-none placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-950 transition-colors"
-                                autoFocus
-                            />
-                            {inputValue.length > 0 && inputValue.length < 2 && (
-                                <div className="absolute left-11 top-12 text-xs text-slate-400 dark:text-slate-500">
-                                    Keep typing...
-                                </div>
-                            )}
-                        </div>
-
-                        <CommandList className="max-h-[360px] p-2">
+            {/* Dropdown */}
+            {open && (
+                <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-white dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
+                    <div className="max-h-[320px] overflow-y-auto p-2">
                             {/* AI Insights - Clean & Minimal */}
                             {!loading && aiInsight && aiInsight.confidence > 0.7 && (
                                 <div className="mx-2 mb-2 px-3 py-2 border border-slate-200 dark:border-slate-800 rounded-md bg-slate-50/50 dark:bg-slate-900/50">
@@ -368,10 +373,9 @@ export function LocationInput({ value, onChange, onSelect, displayValue, onDispl
                                     })}
                                 </div>
                             )}
-                        </CommandList>
-                    </Command>
-                </PopoverContent>
-            </Popover>
+                        </div>
+                    </div>
+                )}
         </div>
     )
 }

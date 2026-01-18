@@ -181,10 +181,9 @@ export function AISearchAssistant({ onSearchIntent, className }: AISearchAssista
                     {/* Header */}
                     <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 rounded-t-2xl">
                         <div className="flex items-center gap-2">
-                            <MessageCircle className="w-4 h-4 text-slate-600 dark:text-slate-300" />
                             <div>
                                 <h3 className="font-semibold text-slate-900 dark:text-slate-100 font-display">Flight Assistant</h3>
-                                <p className="text-xs text-slate-500 dark:text-slate-400">Powered by Groq</p>
+                                <p className="text-xs text-slate-500 dark:text-slate-400">Powered by SkyScout</p>
                             </div>
                         </div>
                         <button
