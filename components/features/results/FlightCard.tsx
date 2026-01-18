@@ -11,10 +11,12 @@ import { useState } from "react";
 import Image from "next/image";
 import { useSearchStore } from "@/store/use-search-store";
 import { getPriceForSearch } from "@/lib/api/pricing";
+import { useRouter } from "next/navigation";
 
 export function FlightCard({ flight }: { flight: Flight }) {
     const [expanded, setExpanded] = useState(false);
     const { searchParams } = useSearchStore();
+    const router = useRouter();
 
     // Duration formatter
     const hours = Math.floor(flight.duration / 60);
@@ -55,19 +57,20 @@ export function FlightCard({ flight }: { flight: Flight }) {
                 <div className="flex items-center justify-between mb-4 sm:mb-6">
                     <div className="flex items-center gap-2 sm:gap-3">
                         <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center overflow-hidden">
+                            <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-slate-700 dark:text-slate-300 z-0">
+                                {flight.airline.code}
+                            </div>
                             <Image
                                 src={flight.airline.logo}
                                 alt={flight.airline.name}
                                 width={32}
                                 height={32}
-                                className="object-contain"
+                                className="object-contain relative z-10 bg-white dark:bg-slate-800 rounded-lg"
+                                unoptimized
                                 onError={(e) => {
                                     e.currentTarget.style.display = 'none';
                                 }}
                             />
-                            <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-slate-700 dark:text-slate-300">
-                                {flight.airline.code}
-                            </div>
                         </div>
                         <div className="flex flex-col">
                             <span className="font-medium text-slate-900 dark:text-white text-xs sm:text-sm">{flight.airline.name}</span>
@@ -161,7 +164,10 @@ export function FlightCard({ flight }: { flight: Flight }) {
                             {expanded ? 'Hide' : 'View'} details
                             <ChevronDown className={`w-4 h-4 ml-1 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} />
                         </Button>
-                        <Button className="px-6 sm:px-8 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white shadow-sm hover:shadow-md transition-all group-hover:scale-105 transform duration-200 flex-1 sm:flex-none text-sm sm:text-base">
+                        <Button 
+                            className="px-6 sm:px-8 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white shadow-sm hover:shadow-md transition-all group-hover:scale-105 transform duration-200 flex-1 sm:flex-none text-sm sm:text-base"
+                            onClick={() => router.push(`/booking/${flight.id}`)}
+                        >
                             Select
                         </Button>
                     </div>

@@ -7,7 +7,18 @@ import { generateMockFlightsForRoute } from '@/lib/api/mock-data';
 
 // Helper to look up airline names (Mock/Hardcoded mostly as API returns codes, 
 // though Dictionaries in response contain them, we'll try to use that)
-const getAirlineLogo = (code: string) => `https://pic.avs.io/al/100/100/${code}.png`; // Using popular CDN for logos
+const getAirlineLogo = (code: string) => {
+    // Custom logos for specific airlines where CDNs don't work well
+    const customLogos: Record<string, string> = {
+        'WS': 'https://static.wikia.nocookie.net/logopedia/images/c/c2/WestJet_Icon2018.svg/revision/latest?cb=20190812235332',
+        'HA': 'https://toppng.com/uploads/preview/hawaiian-airlines-logo-vector-11573935919tgavoyo0wb.png',
+        'AS': 'https://brandlogos.net/wp-content/uploads/2021/11/alaska_airlines-logo.png',
+        // Add more custom logos as needed
+    };
+    
+    // Try custom logos first, then fallback to FlightAware CDN (most reliable for airline logos)
+    return customLogos[code] || `https://images.kiwi.com/airlines/64/${code}.png`;
+};
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);

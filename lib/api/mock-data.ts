@@ -12,13 +12,18 @@ const AIRPORTS: Record<string, Airport> = {
 };
 
 const AIRLINES: Record<string, Airline> = {
-    BA: { code: 'BA', name: 'British Airways', logo: '/logos/ba.png' },
-    AA: { code: 'AA', name: 'American Airlines', logo: '/logos/aa.png' },
-    EK: { code: 'EK', name: 'Emirates', logo: '/logos/ek.png' },
-    JL: { code: 'JL', name: 'Japan Airlines', logo: '/logos/jl.png' },
-    SQ: { code: 'SQ', name: 'Singapore Airlines', logo: '/logos/sq.png' },
-    AF: { code: 'AF', name: 'Air France', logo: '/logos/af.png' },
-    DL: { code: 'DL', name: 'Delta Air Lines', logo: '/logos/dl.png' },
+    BA: { code: 'BA', name: 'British Airways', logo: 'https://images.kiwi.com/airlines/64/BA.png' },
+    AA: { code: 'AA', name: 'American Airlines', logo: 'https://images.kiwi.com/airlines/64/AA.png' },
+    EK: { code: 'EK', name: 'Emirates', logo: 'https://images.kiwi.com/airlines/64/EK.png' },
+    JL: { code: 'JL', name: 'Japan Airlines', logo: 'https://images.kiwi.com/airlines/64/JL.png' },
+    SQ: { code: 'SQ', name: 'Singapore Airlines', logo: 'https://images.kiwi.com/airlines/64/SQ.png' },
+    AF: { code: 'AF', name: 'Air France', logo: 'https://images.kiwi.com/airlines/64/AF.png' },
+    DL: { code: 'DL', name: 'Delta Air Lines', logo: 'https://images.kiwi.com/airlines/64/DL.png' },
+    WS: { code: 'WS', name: 'WestJet', logo: 'https://images.kiwi.com/airlines/64/WS.png' },
+    HA: { code: 'HA', name: 'Hawaiian Airlines', logo: 'https://images.kiwi.com/airlines/64/HA.png' },
+    AS: { code: 'AS', name: 'Alaska Airlines', logo: 'https://images.kiwi.com/airlines/64/AS.png' },
+    F9: { code: 'F9', name: 'Frontier Airlines', logo: 'https://images.kiwi.com/airlines/64/F9.png' },
+    B6: { code: 'B6', name: 'JetBlue Airways', logo: 'https://images.kiwi.com/airlines/64/B6.png' },
 };
 
 function getAirport(code: string): Airport {

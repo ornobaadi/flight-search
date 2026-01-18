@@ -98,3 +98,20 @@ export interface FilterState {
     airlines: string[]; // airline codes
     timeRange: 'all' | 'morning' | 'afternoon' | 'evening';
 }
+
+export interface BookingProvider {
+    id: string;
+    name: string;
+    logo?: string;
+    price: number;
+    currency: string;
+    url: string;
+    type: "airline" | "ota"; // Online Travel Agency
+    benefits?: string[];
+    isBestPrice?: boolean;
+    searchParams?: {
+        origin: string;
+        destination: string;
+        date: string;
+    };
+}

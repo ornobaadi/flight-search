@@ -32,7 +32,6 @@ export function SearchHeader() {
 
                 <div className="flex gap-1 sm:gap-2 items-center">
                     <ThemeToggle />
-                    <Button variant="ghost" className="text-xs sm:text-sm px-2 sm:px-4">Sign In</Button>
                 </div>
             </div>
         </header>
